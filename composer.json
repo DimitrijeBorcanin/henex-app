@@ -12,7 +12,8 @@
         "laravel/jetstream": "^2.6",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "livewire/livewire": "^2.5"
+        "livewire/livewire": "^2.5",
+        "ext-bcmath": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -53,7 +54,6 @@
     "extra": {
         "laravel": {
             "dont-discover": [
-                "laravel/telescope"
             ]
         }
     },
