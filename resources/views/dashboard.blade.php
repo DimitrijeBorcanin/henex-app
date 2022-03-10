@@ -7,8 +7,36 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <x-jet-welcome />
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <a href="{{route('users')}}">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-user"></i> Korisnici
+                    </div>
+                </a>
+                
+                <a href="#">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-car"></i> Tehnički pregledi
+                    </div>
+                </a>
+
+                <a href="#">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-cash-register"></i> Kase
+                    </div>
+                </a>
+
+                <a href="#">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-location-dot"></i> Lokacije
+                    </div>
+                </a>
+
+                <a href="#">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-file-invoice"></i> Polise
+                    </div>
+                </a>
             </div>
         </div>
     </div>
