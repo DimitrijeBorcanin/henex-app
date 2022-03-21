@@ -15,9 +15,14 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('general.dashboard') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
+                        {{ __('Tehnički') }}
+                    </x-jet-nav-link>
+                    @if(Auth::user()->role_id == 1)
                     <x-jet-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                         {{ __('Korisnici') }}
                     </x-jet-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -144,9 +149,14 @@
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('general.dashboard') }}
             </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
+                {{ __('Tehnički') }}
+            </x-jet-responsive-nav-link>
+            @if(Auth::user()->role_id == 1)
             <x-jet-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                 {{ __('Korisnici') }}
             </x-jet-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

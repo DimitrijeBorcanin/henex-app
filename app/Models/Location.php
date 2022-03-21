@@ -14,4 +14,8 @@ class Location extends Model
     public function users(){
         return $this->hasMany(User::class);
     }
+
+    public function technicals(){
+        return $this->hasMany(Technical::class);
+    }
 }

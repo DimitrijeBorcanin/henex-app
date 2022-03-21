@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Livewire\Users;
+use App\Http\Livewire\Technicals;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,5 +27,10 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/', function(){
         return view('dashboard');
     })->name('dashboard');
-    Route::get('/users', Users\ShowAll::class)->name('users');
+    Route::get('/users', Users\ShowAll::class)->name('users')->middleware('admin');
+
+    Route::get('/technicals', Technicals\ShowAll::class)->name('technicals');
+    Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create');
+    Route::get('/technicals/{technical}', Technicals\Show::class)->name('technicals.show');
+    Route::get('/technicals/{technical}/edit', Technicals\Edit::class)->name('technicals.edit');
 });
