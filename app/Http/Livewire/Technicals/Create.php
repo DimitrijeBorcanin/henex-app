@@ -41,7 +41,7 @@ class Create extends Component
             'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric', 'max:1000000'],
             'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric', 'max:1000000'],
             'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric', 'max:1000000'],
-            'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_cash', 'numeric', 'max:1000000'],
+            'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric', 'max:1000000'],
             'agency' => ['numeric', 'max:1000000'],
             'voucher' => ['numeric', 'max:1000000'],
             'adm' => ['numeric', 'max:1000000'],
