@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             LocationSeeder::class,
             InsuranceCompanySeeder::class,
+            IncomeTypeSeeder::class,
+            ExpenseTypeSeeder::class,
             UserSeeder::class,
         ]);
     }

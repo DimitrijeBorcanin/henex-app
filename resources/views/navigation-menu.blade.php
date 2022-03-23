@@ -22,6 +22,12 @@
                     <x-jet-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                         {{ __('Korisnici') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
+                        {{ __('Troškovi') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
+                        {{ __('Prihodi') }}
+                    </x-jet-nav-link>
                     @endif
                 </div>
             </div>
@@ -155,6 +161,12 @@
             @if(Auth::user()->role_id == 1)
             <x-jet-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                 {{ __('Korisnici') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
+                {{ __('Troškovi') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
+                {{ __('Prihodi') }}
             </x-jet-responsive-nav-link>
             @endif
         </div>
