@@ -31,6 +31,12 @@
                         <i class="fa-solid fa-money-bill"></i> Prihodi
                     </div>
                 </a>
+
+                <a href="{{route('marketing')}}">
+                    <div class="bg-white p-5 text-2xl rounded hover:drop-shadow-md hover:scale-105 ease-in-out duration-300">
+                        <i class="fa-solid fa-chart-simple"></i> Marketing
+                    </div>
+                </a>
             </div>
         </div>
     </div>

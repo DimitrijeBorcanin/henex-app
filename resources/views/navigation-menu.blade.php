@@ -29,6 +29,9 @@
                         {{ __('Prihodi') }}
                     </x-jet-nav-link>
                     @endif
+                    <x-jet-nav-link href="{{ route('marketing') }}" :active="request()->routeIs('marketing')">
+                        {{ __('Marketing') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 
@@ -169,6 +172,9 @@
                 {{ __('Prihodi') }}
             </x-jet-responsive-nav-link>
             @endif
+            <x-jet-responsive-nav-link href="{{ route('marketing') }}" :active="request()->routeIs('marketing')">
+                {{ __('Marketing') }}
+            </x-jet-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
