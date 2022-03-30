@@ -27,4 +27,8 @@ class Expense extends Model
     public function expenseType(){
         return $this->belongsTo(ExpenseType::class);
     }
+
+    public function location(){
+        return $this->belongsTo(Location::class);
+    }
 }

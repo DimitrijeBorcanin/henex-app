@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Expenses;
 
 use App\Models\Expense;
 use App\Models\ExpenseType;
+use App\Models\Location;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +17,8 @@ class ShowAll extends Component
     public $filter = [
         "date_from" => "",
         "date_to" => "",
-        "expenseType" => "0"
+        "expenseType" => "0",
+        "location" => "0"
     ];
 
     public function mount(){
@@ -42,6 +44,10 @@ class ShowAll extends Component
         if($this->filter["expenseType"] != 0){
             $expenses = $expenses->where('expense_type_id', $this->filter["expenseType"]);
         }
+
+        if($this->filter["location"] != 0){
+            $expenses = $expenses->where('location_id', $this->filter["location"]);
+        }
         
         return $expenses->latest()->paginate($this->pagination);
     }
@@ -54,7 +60,8 @@ class ShowAll extends Component
     {
         return view('livewire.expenses.show-all', [
             'expenses' => $this->fetch(),
-            'expenseTypes' => ExpenseType::all()
+            'expenseTypes' => ExpenseType::all(),
+            'locations' => Location::all()
         ]);
     }
 }

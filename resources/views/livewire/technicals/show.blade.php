@@ -70,14 +70,15 @@
         </div>
 
         <!-- Insurance company -->
+        
         <div class="col-span-12 text-xl mt-3">
             <h2 class="text-2xl">Polisa</h2>
             <hr/>
         </div>
         <div class="col-span-3">
-            <h2 class="text-xl">{{$technical->insuranceCompany->name}} {{$technical->getFormattedAmount('policy')}}</h2>
+            <h2 class="text-xl">@if($technical->insurance_company_id){{$technical->insuranceCompany->name}}@endif {{$technical->getFormattedAmount('policy')}}</h2>
         </div>
-
+        
         <div class="col-span-12 text-xl mt-3">
             <h2 class="text-2xl">Iznos registracije naplaćen sa provizijom</h2>
             <hr/>

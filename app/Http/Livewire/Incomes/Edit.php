@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Incomes;
 
 use App\Models\Income;
 use App\Models\IncomeType;
+use App\Models\Location;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
@@ -18,7 +19,8 @@ class Edit extends Component
         "non_cash" => "",
         "description" => "",
         "excerpt_date" => "",
-        "excerpt_status" => ""
+        "excerpt_status" => "",
+        "location_id" => "0"
     ];
 
     public function mount(Income $income){
@@ -35,6 +37,7 @@ class Edit extends Component
             "description" => $this->income->description ?? '',
             "excerpt_date" => $this->income->excerpt_date ?? '',
             "excerpt_status" => $this->income->excerpt_status ?? '',
+            "location_id" => $this->expense->location_id ?? ''
         ];
     }
 
@@ -46,7 +49,8 @@ class Edit extends Component
             'income_type_id' => ['required', 'not_in:0', 'exists:income_types,id'],
             'description' => ['required_if:income_type_id,1', 'string'],
             'excerpt_date' => ['date'],
-            'excerpt_status' => ['numeric', 'max:1000000']
+            'excerpt_status' => ['numeric', 'max:1000000'],
+            'location_id' => ['required', 'not_in:0', 'exists:locations,id'],
         ], [
             'max' => 'Prevelika vrednost.',
             'income_date.required' => 'Datum je obavezan.',
@@ -57,7 +61,10 @@ class Edit extends Component
             'required_without_all' => 'Mora biti upisan bar jedan način plaćanja.',
             'numeric' => 'Mora biti broj.',
             'description.required_if' => 'Dodatan opis mora da postoji ako je izabrano OSTALO.',
-            'excerpt_date.date' => 'Datum izvoda je u lošem formatu.'
+            'excerpt_date.date' => 'Datum izvoda je u lošem formatu.',
+            'location.required' => 'Morate izabrati lokaciju.',
+            'location.not_in' => 'Morate izabrati lokaciju.',
+            'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
         foreach($this->incomeFields as $field => $value){
@@ -74,7 +81,8 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.incomes.edit', [
-            'incomeTypes' => IncomeType::all()
+            'incomeTypes' => IncomeType::all(),
+            "locations" => Location::all()
         ]);
     }
 }

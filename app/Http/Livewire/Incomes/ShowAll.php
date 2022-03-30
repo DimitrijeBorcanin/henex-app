@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Incomes;
 
 use App\Models\Income;
 use App\Models\IncomeType;
+use App\Models\Location;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,7 +17,8 @@ class ShowAll extends Component
     public $filter = [
         "date_from" => "",
         "date_to" => "",
-        "incomeType" => "0"
+        "incomeType" => "0",
+        "location" => "0"
     ];
 
     public function mount(){
@@ -42,6 +44,10 @@ class ShowAll extends Component
         if($this->filter["incomeType"] != 0){
             $incomes = $incomes->where('income_type_id', $this->filter["incomeType"]);
         }
+
+        if($this->filter["location"] != 0){
+            $incomes = $incomes->where('location_id', $this->filter["location"]);
+        }
         
         return $incomes->latest()->paginate($this->pagination);
     }
@@ -54,7 +60,8 @@ class ShowAll extends Component
     {
         return view('livewire.incomes.show-all', [
             'incomes' => $this->fetch(),
-            'incomeTypes' => IncomeType::all()
+            'incomeTypes' => IncomeType::all(),
+            'locations' => Location::all()
         ]);
     }
 }

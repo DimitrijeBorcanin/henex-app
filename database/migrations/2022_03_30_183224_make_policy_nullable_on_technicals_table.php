@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionToIncomesTable extends Migration
+class MakePolicyNullableOnTechnicalsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddDescriptionToIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->string('description')->nullable()->after('excerpt_status');
+        Schema::table('technicals', function (Blueprint $table) {
+            $table->decimal('policy')->nullable()->change();
+            $table->unsignedBigInteger('insurance_company_id')->nullable()->change();
         });
     }
 
@@ -25,8 +26,6 @@ class AddDescriptionToIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('description');
-        });
+        //
     }
 }

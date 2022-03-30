@@ -14,7 +14,7 @@ class AddDescriptionToExpensesTable extends Migration
     public function up()
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->string('description')->nullable()->before('expense_type_id');
+            $table->string('description')->nullable()->after('non_cash');
         });
     }
 

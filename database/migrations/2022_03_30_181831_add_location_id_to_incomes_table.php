@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionToIncomesTable extends Migration
+class AddLocationIdToIncomesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddDescriptionToIncomesTable extends Migration
     public function up()
     {
         Schema::table('incomes', function (Blueprint $table) {
-            $table->string('description')->nullable()->after('excerpt_status');
+            $table->foreignId('location_id')->constrained()->after('income_type_id');
         });
     }
 
@@ -26,7 +26,7 @@ class AddDescriptionToIncomesTable extends Migration
     public function down()
     {
         Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('description');
+            $table->dropColumn('location_id');
         });
     }
 }

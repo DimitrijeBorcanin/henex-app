@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionToIncomesTable extends Migration
+class AddLocationIdToExpensesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddDescriptionToIncomesTable extends Migration
      */
     public function up()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->string('description')->nullable()->after('excerpt_status');
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->foreignId('location_id')->constrained()->after('income_type_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddDescriptionToIncomesTable extends Migration
      */
     public function down()
     {
-        Schema::table('incomes', function (Blueprint $table) {
-            $table->dropColumn('description');
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->dropColumn('location_id');
         });
     }
 }

@@ -74,7 +74,8 @@ class Edit extends Component
             'agency' => ['numeric', 'max:1000000'],
             'voucher' => ['numeric', 'max:1000000'],
             'adm' => ['numeric', 'max:1000000'],
-            'insurance_company_id' => ['required', 'not_in:0', 'exists:insurance_companies,id'],
+            'insurance_company_id' => ['exists:insurance_companies,id'],
+            'policy' => ['numeric', 'max:1000000'],
             'location_id' => ['required', 'not_in:0', 'exists:locations,id']
         ], [
             'max' => 'Prevelika vrednost.',
@@ -85,8 +86,8 @@ class Edit extends Component
             'insurance_company_id.required' => 'Osiguranje je obavezno.',
             'insurance_company_id.not_in' => 'Osiguranje nije izabrano.',
             'insurance_company_id.exists' => 'Osiguranje ne postoji u bazi.',
-            'location_id.required' => 'Lokacija je obavezna.',
-            'location_id.not_in' => 'Lokacija nije izabrana.',
+            // 'location_id.required' => 'Lokacija je obavezna.',
+            // 'location_id.not_in' => 'Lokacija nije izabrana.',
             'location_id.exists' => 'Lokacija ne postoji u bazi.',
             'required_without_all' => 'Mora biti upisan bar jedan način plaćanja.',
             'numeric' => 'Mora biti broj.'

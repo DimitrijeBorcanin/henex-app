@@ -24,12 +24,22 @@
                     <x-jet-input id="date_to" type="date" class="mt-1 block w-full" wire:model="filter.date_to" />
                 </div>
     
-                <div class="w-1/5">
+                <div class="w-1/5 mr-2">
                     <x-jet-label for="incomeType" value="Vrsta troška" />
                     <select wire:model="filter.incomeType" class="form-input rounded-md shadow-sm block mt-1 py-2 w-full" id="incomeType">
                         <option value="0">Sve</option>
                         @foreach($incomeTypes as $type)
                             <option value="{{$type->id}}">{{$type->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="w-1/5">
+                    <x-jet-label for="location" value="Lokacija" />
+                    <select wire:model="filter.location" class="form-input rounded-md shadow-sm block mt-1 py-2 w-full" id="location">
+                        <option value="0">Sve</option>
+                        @foreach($locations as $location)
+                            <option value="{{$location->id}}">{{$location->name}}</option>
                         @endforeach
                     </select>
                 </div>

@@ -39,4 +39,8 @@ class Income extends Model
     public function incomeType(){
         return $this->belongsTo(IncomeType::class);
     }
+
+    public function location(){
+        return $this->belongsTo(Location::class);
+    }
 }

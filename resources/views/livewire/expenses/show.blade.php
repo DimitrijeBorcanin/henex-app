@@ -21,13 +21,17 @@
         </div>
         <div class="col-span-3">
             <h2>Gotovina:</h2>
-            <h2 class="text-xl">{{$expense->formatted_cash}}</h2>
+            <h2 class="text-xl">{{$expense->formatted_cash}} din.</h2>
         </div>
         <div class="col-span-3">
             <h2>Bezgotovina:</h2>
-            <h2 class="text-xl">{{$expense->formatted_non_cash}}</h2>
+            <h2 class="text-xl">{{$expense->formatted_non_cash}} din.</h2>
         </div>
-        <div class="col-span-12">
+        <div class="col-span-3">
+            <h2>Lokacija:</h2>
+            <h2 class="text-xl">{{$expense->location->name}}</h2>
+        </div>
+        <div class="col-span-9">
             <h2>Dodatni opis:</h2>
             <h2 class="text-xl">{{$expense->description ?? '-'}}</h2>
         </div>

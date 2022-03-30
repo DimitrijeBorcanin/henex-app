@@ -35,6 +35,10 @@
             <h2>Stanje izvoda na dan:</h2>
             <h2 class="text-xl">{{$income->formatted_excerpt_status != 0 ? $income->formatted_excerpt_status . ' din.' : '-'}}</h2>
         </div>
+        <div class="col-span-3">
+            <h2>Lokacija:</h2>
+            <h2 class="text-xl">{{$income->location->name}}</h2>
+        </div>
         <div class="col-span-12">
             <h2>Dodatni opis:</h2>
             <h2 class="text-xl">{{$income->description ?? '-'}}</h2>

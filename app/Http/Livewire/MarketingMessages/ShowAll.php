@@ -60,7 +60,8 @@ class ShowAll extends Component
                 "sent_date" => $message["sent_date"],
                 "viber" => $message["viber"] ?? '',
                 "sms" => $message["sms"] ?? '',
-                "letters" => $message["letters"] ?? ''
+                "letters" => $message["letters"] ?? '',
+                "location_id" => $message["location_id"] ?? ''
             ];
         } else {
             $this->isEdit = false;
@@ -114,10 +115,14 @@ class ShowAll extends Component
             'viber' => ['integer'],
             'sms' => ['integer'],
             'letters' => ['integer'],
+            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
         ], [
             'sent_date.required' => 'Datum je obavezan.',
             'sent_date.date' => 'Datum je u pogrešnom formatu.',
-            'integer' => 'U polju mora biti celobrojna vrednost.'
+            'integer' => 'U polju mora biti celobrojna vrednost.',
+            'location.required' => 'Morate izabrati lokaciju.',
+            'location.not_in' => 'Morate izabrati lokaciju.',
+            'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
         foreach($this->message as $field => $value){
@@ -140,7 +145,8 @@ class ShowAll extends Component
             "date" => '',
             "viber" => '',
             "sms" => '',
-            "letters" => ''
+            "letters" => '',
+            "location_id" => '0'
         ];
     }
 

@@ -55,6 +55,16 @@
                 <x-jet-input id="excerpt_status" type="text" class="mt-1 block w-full" wire:model.defer="income.excerpt_status"/>
                 <x-jet-input-error for="excerpt_status" class="mt-2" />
             </div>
+            <div class="col-span-3">
+                <x-jet-label for="location_id" value="Lokacija" />
+                <select wire:model.defer="income.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
+                    <option value="0">Izaberite...</option>
+                    @foreach($locations as $location)
+                            <option value="{{$location->id}}">{{$location->name}}</option>
+                    @endforeach
+                </select>
+                <x-jet-input-error for="location_id" class="mt-2" />
+            </div>
 
             <div class="col-span-12">
                 <x-jet-label for="description" value="Opis" />
