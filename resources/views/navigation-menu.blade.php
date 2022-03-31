@@ -28,6 +28,9 @@
                     <x-jet-nav-link href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
                         {{ __('Prihodi') }}
                     </x-jet-nav-link>
+                    <x-jet-nav-link href="{{ route('checks') }}" :active="request()->routeIs('checks')">
+                        {{ __('Čekovi') }}
+                    </x-jet-nav-link>
                     @endif
                     <x-jet-nav-link href="{{ route('marketing') }}" :active="request()->routeIs('marketing')">
                         {{ __('Marketing') }}
@@ -170,6 +173,9 @@
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
                 {{ __('Prihodi') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('checks') }}" :active="request()->routeIs('checks')">
+                {{ __('Čekovi') }}
             </x-jet-responsive-nav-link>
             @endif
             <x-jet-responsive-nav-link href="{{ route('marketing') }}" :active="request()->routeIs('marketing')">

@@ -6,6 +6,7 @@ use App\Http\Livewire\Expenses;
 use App\Http\Livewire\Incomes;
 use App\Http\Livewire\Clients;
 use App\Http\Livewire\Marketing;
+use App\Http\Livewire\Checks;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
         Route::get('/incomes/create', Incomes\Create::class)->name('incomes.create');
         Route::get('/incomes/{income}', Incomes\Show::class)->name('incomes.show');
         Route::get('/incomes/{income}/edit', Incomes\Edit::class)->name('incomes.edit');
+
+        Route::get('/checks', Checks\ShowAll::class)->name('checks');
+        Route::get('/checks/create', Checks\Create::class)->name('checks.create');
+        Route::get('/checks/{check}', Checks\Show::class)->name('checks.show');
+        Route::get('/checks/{check}/edit', Checks\Edit::class)->name('checks.edit');
 
         Route::get('/marketing', function(){
             return view('livewire.marketing.dashboard');

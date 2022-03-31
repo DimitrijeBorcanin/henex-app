@@ -1105,6 +1105,9 @@ select {
 .block {
   display: block;
 }
+.inline {
+  display: inline;
+}
 .flex {
   display: flex;
 }
@@ -1197,6 +1200,9 @@ select {
 }
 .w-1\/5 {
   width: 20%;
+}
+.w-1\/6 {
+  width: 16.666667%;
 }
 .w-1\/4 {
   width: 25%;
