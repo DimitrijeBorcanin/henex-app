@@ -19,6 +19,9 @@
                         {{ __('Tehnički') }}
                     </x-jet-nav-link>
                     @if(Auth::user()->role_id == 1)
+                    <x-jet-nav-link href="{{ route('daily-states') }}" :active="request()->routeIs('daily-states')">
+                        {{ __('Dnevna tabela') }}
+                    </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                         {{ __('Korisnici') }}
                     </x-jet-nav-link>
@@ -165,6 +168,9 @@
                 {{ __('Tehnički') }}
             </x-jet-responsive-nav-link>
             @if(Auth::user()->role_id == 1)
+            <x-jet-responsive-nav-link href="{{ route('daily-states') }}" :active="request()->routeIs('daily-states')">
+                {{ __('Dnevna tabela') }}
+            </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                 {{ __('Korisnici') }}
             </x-jet-responsive-nav-link>

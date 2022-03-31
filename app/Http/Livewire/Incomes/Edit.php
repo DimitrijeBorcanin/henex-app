@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Incomes;
 
+use App\Models\DailyState;
 use App\Models\Income;
 use App\Models\IncomeType;
 use App\Models\Location;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Throwable;
 
 class Edit extends Component
 {
@@ -37,7 +40,7 @@ class Edit extends Component
             "description" => $this->income->description ?? '',
             "excerpt_date" => $this->income->excerpt_date ?? '',
             "excerpt_status" => $this->income->excerpt_status ?? '',
-            "location_id" => $this->expense->location_id ?? ''
+            "location_id" => $this->income->location_id ?? ''
         ];
     }
 
@@ -73,9 +76,22 @@ class Edit extends Component
             }
         }
 
-        $this->income->update($this->incomeFields);
+        try {
+            DB::beginTransaction();
+            $oldAmount = $this->income->cash;
+            $oldLocation = $this->income->location_id;
+            $oldDate = $this->income->income_date;
+            $this->income->update($this->incomeFields);
+            $oldState = DailyState::where('state_date', $oldDate)->where('location_id', $oldLocation)->first();
+            $oldState->updateState('incomes_cash', 0, $oldAmount);
+            $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
+            $state->updateState('incomes_cash', $this->income["cash"]);
+            DB::commit();
+            return redirect()->route('incomes.show', ["income" => $this->income->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+        }
 
-        return redirect()->route('incomes.show', ["income" => $this->income->id]);
     }
 
     public function render()

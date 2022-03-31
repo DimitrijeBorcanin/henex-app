@@ -7,6 +7,7 @@ use App\Http\Livewire\Incomes;
 use App\Http\Livewire\Clients;
 use App\Http\Livewire\Marketing;
 use App\Http\Livewire\Checks;
+use App\Http\Livewire\DailyStates;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,11 +36,17 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/users', Users\ShowAll::class)->name('users')->middleware('admin');
 
     Route::get('/technicals', Technicals\ShowAll::class)->name('technicals');
-    Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create');
+    Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create')->middleware('daily-state');
     Route::get('/technicals/{technical}', Technicals\Show::class)->name('technicals.show');
     Route::get('/technicals/{technical}/edit', Technicals\Edit::class)->name('technicals.edit');
 
+    Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
+    Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
+
     Route::middleware(['admin'])->group(function(){
+        Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
+        // Route::get('/daily-states/{state}/edit', DailyStates\Edit::class)->name('daily-states.edit');
+
         Route::get('/expenses', Expenses\ShowAll::class)->name('expenses');
         Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create');
         Route::get('/expenses/{expense}', Expenses\Show::class)->name('expenses.show');

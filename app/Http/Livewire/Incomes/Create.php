@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Incomes;
 
+use App\Models\DailyState;
 use App\Models\Income;
 use App\Models\IncomeType;
 use App\Models\Location;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
+use Throwable;
 
 class Create extends Component
 {
@@ -53,9 +56,17 @@ class Create extends Component
             }
         }
 
-        $newIncome = Income::create($this->income);
-
-        return redirect()->route('incomes.show', ["income" => $newIncome->id]);
+        try {
+            DB::beginTransaction();
+            $newIncome = Income::create($this->income);
+            $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
+            $state->updateState('incomes_cash', $this->income["cash"]);
+            DB::commit();
+            return redirect()->route('incomes.show', ["income" => $newIncome->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+        }
+        
     }
 
     public function render()

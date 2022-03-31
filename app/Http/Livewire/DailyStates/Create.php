@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Livewire\DailyStates;
+
+use App\Models\DailyState;
+use App\Models\InsuranceCompany;
+use App\Models\Location;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Livewire\Component;
+use Throwable;
+
+class Create extends Component
+{
+    public $state = [
+        "register_start" => "",
+        "location_id" => "0",
+    ];
+
+    public function mount(){
+        $this->getPreviousState();
+    }
+
+    public function store(){
+        Validator::make($this->state, [
+            'register_start' => ['required', 'numeric'],
+            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 'not_in:0', 'exists:locations,id']
+        ], [
+            'max' => 'Prevelika vrednost.',
+            'register_start.required' => 'Stanje kase na početku dana je obavezno.',
+            'numeric' => 'Mora biti broj.',
+            'location.required' => 'Morate izabrati lokaciju.',
+            'location.not_in' => 'Morate izabrati lokaciju.',
+            'location.exists' => 'Lokacija ne postoji u bazi.'
+        ])->validate();
+
+        if(Auth::user()->role_id != 1){
+            $this->state["location_id"] = Auth::user()->location_id;
+        }
+
+        $this->state["state_date"] = Carbon::now();
+
+        try {
+            DB::beginTransaction();
+            $insuranceCompanies = InsuranceCompany::all();
+            $newState = DailyState::create($this->state);
+            foreach($insuranceCompanies as $ic){
+                $newState->policies()->create(["daily_state_id" => $newState->id, "insurance_company_id" => $ic->id]);
+            }
+            DB::commit();
+            return redirect()->route('daily-states.show', ["state" => $newState->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+            $this->dispatchBrowserEvent('error', ['message' => 'Došlo je do greške!']);
+        }
+
+    }
+
+    public function getPreviousState(){
+        if(Auth::user()->role_id == 1 && $this->state["location_id"] == 0){
+            return;
+        }
+        $loc = Auth::user()->role_id == 1 ? $this->state["location_id"] : Auth::user()->location_id;
+        $today = Carbon::now();
+        switch($today->dayOfWeek){
+            case 1:
+                $lastDay = $today->subDays(3);
+                break;
+            default:
+                $lastDay = $today->subDay();
+        }
+        $previousState = DailyState::where('state_date', $lastDay->toDateString('YYYY-mm-dd'))->where('location_id', $loc)->first();
+        if($previousState){
+            $this->state["register_start"] = $previousState->register_end;
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.daily-states.create', [
+            "locations" => Location::all()
+        ]);
+    }
+}
