@@ -2,13 +2,16 @@
 
 namespace App\Http\Livewire\Technicals;
 
+use App\Models\DailyState;
 use App\Models\InsuranceCompany;
 use App\Models\Location;
 use App\Models\Technical;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class Edit extends Component
 {
@@ -99,9 +102,53 @@ class Edit extends Component
             }
         }
 
-        $this->technical->update($this->technicalFields);
+        try {
+            DB::beginTransaction();
 
-        return redirect()->route('technicals.show', ["technical" => $this->technical->id]);
+            $oldState = DailyState::where('state_date', $this->technical->tech_date)->where('location_id', $this->technical->location_id)->first();
+            $oldState->updateState('reg_cash', 0, $this->technical["reg_cash"]);
+            $oldState->updateState('reg_check', 0, $this->technical["reg_check"]);
+            $oldState->updateState('reg_card', 0, $this->technical["reg_card"]);
+            $oldState->updateState('reg_firm', 0, $this->technical["reg_firm"]);
+            $oldState->updateState('tech_cash', 0, $this->technical["tech_cash"]);
+            $oldState->updateState('tech_check', 0, $this->technical["tech_check"]);
+            $oldState->updateState('tech_card', 0, $this->technical["tech_card"]);
+            $oldState->updateState('tech_invoice', 0, $this->technical["tech_invoice"]);
+            $oldState->updateState('agency', 0, $this->technical["agency"]);
+            $oldState->updateState('voucher', 0, $this->technical["voucher"]);
+            $oldState->updateState('adm', 0, $this->technical["adm"]);
+
+            if($this->technical["voucher"] && $this->technical["voucher"] > 0){
+                $oldState->voucher_no = $oldState->voucher_no - 1;
+                $oldState->save();
+            }
+
+            $this->technical->update($this->technicalFields);
+            
+            $state = DailyState::where('state_date', $this->technical->tech_date)->where('location_id', $this->technical->location_id)->first();
+            $state->updateState('reg_cash', $this->technical["reg_cash"]);
+            $state->updateState('reg_check', $this->technical["reg_check"]);
+            $state->updateState('reg_card', $this->technical["reg_card"]);
+            $state->updateState('reg_firm', $this->technical["reg_firm"]);
+            $state->updateState('tech_cash', $this->technical["tech_cash"]);
+            $state->updateState('tech_check', $this->technical["tech_check"]);
+            $state->updateState('tech_card', $this->technical["tech_card"]);
+            $state->updateState('tech_invoice', $this->technical["tech_invoice"]);
+            $state->updateState('agency', $this->technical["agency"]);
+            $state->updateState('voucher', $this->technical["voucher"]);
+            $state->updateState('adm', $this->technical["adm"]);
+
+            if($this->technical["voucher"] && $this->technical["voucher"] > 0){
+                $state->voucher_no = $state->voucher_no + 1;
+                $state->save();
+            }
+
+            DB::commit();
+            return redirect()->route('technicals.show', ["technical" => $this->technical->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+        } 
+  
     }
 
     public function render()

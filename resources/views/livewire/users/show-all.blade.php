@@ -16,7 +16,7 @@
             {{ __('Dodajte korisnika') }}
         </x-slot>
     
-        <x-slot name="content">
+        <x-slot name="content">  
             <form>
                 <!-- Name -->
                 <div class="col-span-6 sm:col-span-4 mb-4">
@@ -47,7 +47,7 @@
         
                 <div class="col-span-6 sm:col-span-4 mb-4">
                     <x-jet-label for="role_id" value="Uloga" />
-                    <select wire:model.defer="user.role_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="role_id">
+                    <select wire:change="changeSelectedRole" wire:model.defer="user.role_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="role_id">
                         <option value="0">Izaberite...</option>
                         @foreach($roles as $role)
                                 <option value="{{$role->id}}">{{$role->name}}</option>
@@ -55,6 +55,7 @@
                     </select>
                     <x-jet-input-error for="role_id" class="mt-2" />
                 </div>
+                @if($user["role_id"] == 3)
                 <div class="col-span-6 sm:col-span-4 mb-4">
                     <x-jet-label for="location_id" value="Lokacija" />
                     <select wire:model.defer="user.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
@@ -65,6 +66,18 @@
                     </select>
                     <x-jet-input-error for="location_id" class="mt-2" />
                 </div>
+                @endif
+                @if($user["role_id"] == 2)
+                <div class="col-span-6 sm:col-span-4 mb-4">
+                    <x-jet-label for="locations" value="Lokacija" />
+                    <select multiple wire:model.defer="user.locations" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="locations">
+                        @foreach($locations as $location)
+                                <option value="{{$location->id}}">{{$location->name}}</option>
+                        @endforeach
+                    </select>
+                    <x-jet-input-error for="locations" class="mt-2" />
+                </div>
+                @endif
             </form>
         </x-slot>
     
@@ -140,7 +153,9 @@
                         <tr wire:key="user_{{$user->id}}">
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$user->name}}</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$user->email}}</td>
-                            <td class="px-6 py-4 text-sm whitespace-no-wrap">
+                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$user->role->name}}</td>
+                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$user->location ? $user->location->name : implode(", ", $user->locations()->pluck('name')->toArray())}}</td>
+                            {{-- <td class="px-6 py-4 text-sm whitespace-no-wrap">
                                 <select class="form-select appearance-none
                                 block
                                 w-full
@@ -162,8 +177,8 @@
                                         <option value="{{$role->id}}" @if($user->role_id == $role->id) selected @endif>{{$role->name}}</option>
                                     @endforeach
                                 </select>
-                            </td>
-                            <td class="px-6 py-4 text-sm whitespace-no-wrap">
+                            </td> --}}
+                            {{-- <td class="px-6 py-4 text-sm whitespace-no-wrap">
                                 <select class="form-select appearance-none
                                 block
                                 w-full
@@ -185,7 +200,7 @@
                                         <option value="{{$location->id}}" @if($user->location_id == $location->id) selected @endif>{{$location->name}}</option>
                                     @endforeach
                                 </select>
-                            </td>
+                            </td> --}}
                             <td class="px-6 py-4 text-sm whitespace-no-wrap text-right">
                                 <x-jet-button wire:click="showCreateModal({{$user}})"><i class="fa-solid fa-pen"></i></x-jet-button>
                                 <x-jet-danger-button wire:click="showDeleteModal({{$user}})"><i class="fa-solid fa-trash"></i></x-jet-danger-button>

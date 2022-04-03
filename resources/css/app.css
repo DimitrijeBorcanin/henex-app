@@ -1,3 +1,11 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+.stateSet {
+    display:none;
+}
+
+.stateNotSet {
+    display:none;
+}

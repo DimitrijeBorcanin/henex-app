@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Models\Location;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +31,11 @@ class ShowAll extends Component
         "password" => '',
         "password_confirmation" => '',
         "role_id" => '0',
-        "location_id" => '0'
+        "location_id" => '0',
+        "locations" => []
     ];
+    public $selectedRole = 0;
+
     public $createModalVisible = false;
     public $isEdit = false;
     public $userToUpdate = null;
@@ -40,7 +44,7 @@ class ShowAll extends Component
     public $userToDelete = null;
 
     private function fetch(){
-        $users = User::where('name', 'like', '%'.$this->filter["search"].'%')->where('id', '!=', auth()->id());
+        $users = User::with('role', 'location')->where('name', 'like', '%'.$this->filter["search"].'%')->where('id', '!=', auth()->id());
 
         if($this->filter["role"] != 0){
             $users = $users->where('role_id', $this->filter["role"]);
@@ -109,11 +113,62 @@ class ShowAll extends Component
     }
 
     public function createUser(){
-        $create = new CreateNewUser();
-        $create->create($this->user);
-        $this->resetForm();
-        $this->createModalVisible = false;
-        $this->dispatchBrowserEvent('success', ['message' => 'Uspešno dodat korisnik!']);
+
+         if($this->user["role_id"] == 2){
+            $this->user["location_id"] = null;
+        }
+
+        if($this->user["role_id"] == 3){
+            $this->user["locations"] = [$this->user["location_id"]];
+        }
+
+        Validator::make($this->user, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', new Password, 'confirmed'],
+            'role_id' => ['required', 'not_in:0', 'exists:roles,id'],
+            'location_id' => ['required_without:locations', $this->user["role_id"] == 3 ? 'not_in:0' : '', $this->user["role_id"] == 3 ? 'exists:locations,id' : ''],
+            'locations' => ['required_without:location_id', 'array', 'min:1'],
+            'locations.*' => ['not_in:0', 'exists:locations,id']
+        ], [
+            'name.required' => 'Ime je obavezno.',
+            'name.max' => 'Ime je predugačko.',
+            'email.required' => 'Email je obavezan.',
+            'email.email' => 'Email nije dobrog formata.',
+            'email.max' => 'Email je predugačak.',
+            'email.unique' => 'Email već postoji.',
+            'password.required' => 'Lozinka je obavezna.',
+            'password.confirmed' => 'Potvrda lozinka se ne podudara sa lozinkom.',
+            'password.min' => 'Lozinka mora biti bar 8 karaktera.',
+            'role_id.required' => 'Uloga je obavezna.',
+            'role_id.not_in' => 'Uloga nije izabrana.',
+            'role_id.exists' => 'Uloga ne postoji u bazi.',
+            'location_id.required_without' => 'Lokacija je obavezna.',
+            'location_id.not_in' => 'Lokacija nije izabrana.',
+            'location_id.exists' => 'Lokacija ne postoji u bazi.',
+            'locations.required_without' => 'Lokacija je obavezna.',
+            'locations.min' => 'Mora biti izabrana bar 1 lokacija.',
+            'locations.*.not_in' => 'Mora biti izabrana bar 1 lokacija.',
+            'locations.*.exists' => 'Lokacija ne postoji u bazi.'
+
+        ])->validate();
+
+        try {
+            DB::beginTransaction();
+            $create = new CreateNewUser();
+            $newUser = $create->create($this->user);
+            if($this->user["role_id"] == 2 && count($this->user["locations"]) > 0){
+                $newUser->locations()->sync($this->user["locations"]);
+            }
+            DB::commit();
+            $this->resetForm();
+            $this->createModalVisible = false;
+            $this->dispatchBrowserEvent('success', ['message' => 'Uspešno dodat korisnik!']);
+        } catch (Throwable $e){
+            DB::rollBack();
+        }
+
+        
     }
 
     public function updateUser(){
@@ -188,6 +243,11 @@ class ShowAll extends Component
             "role_id" => '0',
             "location_id" => '0'
         ];
+        $this->selectedRole = 0;
+    }
+
+    public function changeSelectedRole(){
+        $this->selectedRole = $this->user["role_id"];
     }
 
     public function render()

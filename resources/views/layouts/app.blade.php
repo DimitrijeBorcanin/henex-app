@@ -68,5 +68,7 @@
         @stack('modals')
 
         @livewireScripts
+
+        <script src="{{ asset('js/stateChecker.js') }}"></script>
     </body>
 </html>

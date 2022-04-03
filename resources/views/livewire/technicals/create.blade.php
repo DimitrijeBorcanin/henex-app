@@ -22,6 +22,7 @@
                 <x-jet-input-error for="reg_number" class="mt-2" />
             </div>
             <!-- Location -->
+            @if(Auth::user()->role_id == 1)
             <div class="col-span-4">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="technical.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
@@ -32,6 +33,7 @@
                 </select>
                 <x-jet-input-error for="location_id" class="mt-2" />
             </div>
+            @endif
 
             <!-- Reg -->
             <div class="col-span-12 text-xl mt-3">

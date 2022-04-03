@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Expenses;
 
+use App\Models\DailyState;
 use App\Models\Expense;
 use App\Models\ExpenseType;
 use App\Models\Location;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class Create extends Component
 {
@@ -48,9 +51,16 @@ class Create extends Component
             }
         }
 
-        $newExpense = Expense::create($this->expense);
-
-        return redirect()->route('expenses.show', ["expense" => $newExpense->id]);
+        try {
+            DB::beginTransaction();
+            $newExpense = Expense::create($this->expense);
+            $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
+            $state->updateState('expenses_cash', $this->expense["cash"]);
+            DB::commit();
+            return redirect()->route('expenses.show', ["expense" => $newExpense->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+        }
     }
 
     public function render()

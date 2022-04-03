@@ -2,13 +2,16 @@
 
 namespace App\Http\Livewire\Technicals;
 
+use App\Models\DailyState;
 use App\Models\InsuranceCompany;
 use App\Models\Location;
 use App\Models\Technical;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class Create extends Component
 {
@@ -32,6 +35,7 @@ class Create extends Component
     ];
 
     public function store(){
+
         Validator::make($this->technical, [
             'reg_number' => ['required', 'string', 'max:255'],
             'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric', 'max:1000000'],
@@ -47,7 +51,9 @@ class Create extends Component
             'adm' => ['numeric', 'max:1000000'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric', 'max:1000000'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 
+                                Auth::user()->role_id == 1 ? 'not_in:0' : '',
+                                Auth::user()->role_id == 1 ? 'exists:locations,id' : '']
         ], [
             'max' => 'Prevelika vrednost.',
             'reg_number.required' => 'Registarski broj je obavezan.',
@@ -64,19 +70,49 @@ class Create extends Component
 
         foreach($this->technical as $field => $value){
             if(empty($value)){
-                unset($this->technical[$field]);
+                $this->technical[$field] = null;
             }
         }
 
         if(Auth::user()->role_id != 1){
-            unset($this->technical['location_id']);
+            $this->technical['location_id'] = Auth::user()->location_id;
         }
 
         $this->technical['tech_date'] = Carbon::now()->format('Y-m-d');
 
-        $newTechnical = Technical::create($this->technical);
+        try {
+            DB::beginTransaction();
+            $newTechnical = Technical::create($this->technical);
 
-        return redirect()->route('technicals.show', ["technical" => $newTechnical->id]);
+            $state = DailyState::where('state_date', $this->technical["tech_date"])->where('location_id', $this->technical["location_id"])->first();
+
+            $state->updateState('reg_cash', $this->technical["reg_cash"]);
+            $state->updateState('reg_check', $this->technical["reg_check"]);
+            $state->updateState('reg_card', $this->technical["reg_card"]);
+            $state->updateState('reg_firm', $this->technical["reg_firm"]);
+            $state->updateState('tech_cash', $this->technical["tech_cash"]);
+            $state->updateState('tech_check', $this->technical["tech_check"]);
+            $state->updateState('tech_card', $this->technical["tech_card"]);
+            $state->updateState('tech_invoice', $this->technical["tech_invoice"]);
+            $state->updateState('agency', $this->technical["agency"]);
+            $state->updateState('voucher', $this->technical["voucher"]);
+            $state->updateState('adm', $this->technical["adm"]);
+
+            $state->updatePolicy($this->technical["insurance_company_id"], $this->technical["policy"]);
+
+            if($this->technical["voucher"] && $this->technical["voucher"] > 0){
+                $state->voucher_no = $state->voucher_no + 1;
+                $state->save();
+            }
+
+            DB::commit();
+            return redirect()->route('technicals.show', ["technical" => $newTechnical->id]);
+        } catch (Throwable $e){
+            DB::rollBack();
+            dd($e);
+            $this->dispatchBrowserEvent('success', ['message' => 'Došlo je do greške!']);
+        }
+        
     }
 
     public function render()
