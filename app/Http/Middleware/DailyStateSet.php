@@ -8,6 +8,8 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Symfony\Component\String\b;
+
 class DailyStateSet
 {
     /**
@@ -19,6 +21,9 @@ class DailyStateSet
      */
     public function handle(Request $request, Closure $next)
     {
+        if(Auth::user()->role_id == 1){
+            return $next($request);
+        }
         $stateToday = DailyState::where('state_date', Carbon::now()->toDateString('YYYY-mm-dd'))->where('location_id', Auth::user()->location_id)->first();
         if($stateToday){
             return $next($request);

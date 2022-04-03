@@ -85,8 +85,10 @@ class DailyState extends Model
 
     public function updatePolicy($id, $newAmount, $oldAmount = 0){
         $policy = $this->policies()->where('insurance_company_id', $id)->first();
-        $policy->policy = $policy->policy + $newAmount - $oldAmount;
-        $policy->save();
+        if($policy){
+            $policy->policy = $policy->policy + $newAmount - $oldAmount;
+            $policy->save();
+        }
     }
 
     public function policies(){
