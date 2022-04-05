@@ -6,6 +6,7 @@ use App\Models\Expense;
 use App\Models\ExpenseType;
 use App\Models\Location;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -27,6 +28,11 @@ class ShowAll extends Component
     }
 
     private function fetch(){
+
+        if(Auth::user()->role_id == 3){
+            return [];
+        }
+
         $expenses = Expense::with('expenseType');
 
         if($this->filter["date_from"] != ''){
@@ -46,7 +52,11 @@ class ShowAll extends Component
         }
 
         if($this->filter["location"] != 0){
-            $expenses = $expenses->where('location_id', $this->filter["location"]);
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $expenses = $expenses->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $expenses = $expenses->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
         return $expenses->latest()->paginate($this->pagination);
@@ -61,7 +71,7 @@ class ShowAll extends Component
         return view('livewire.expenses.show-all', [
             'expenses' => $this->fetch(),
             'expenseTypes' => ExpenseType::all(),
-            'locations' => Location::all()
+            'locations' => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

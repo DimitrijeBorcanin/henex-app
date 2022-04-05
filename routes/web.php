@@ -48,11 +48,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
 
     Route::get('/expenses', Expenses\ShowAll::class)->name('expenses');
-    Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create');
+    Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create')->middleware('daily-state');
     Route::get('/expenses/{expense}', Expenses\Show::class)->name('expenses.show');
 
     Route::get('/incomes', Incomes\ShowAll::class)->name('incomes');
-    Route::get('/incomes/create', Incomes\Create::class)->name('incomes.create');
+    Route::get('/incomes/create', Incomes\Create::class)->name('incomes.create')->middleware('daily-state');
     Route::get('/incomes/{income}', Incomes\Show::class)->name('incomes.show');
 
     Route::get('/checks', Checks\ShowAll::class)->name('checks');

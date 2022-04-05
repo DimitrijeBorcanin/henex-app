@@ -6,6 +6,8 @@ use App\Models\DailyState;
 use App\Models\Income;
 use App\Models\IncomeType;
 use App\Models\Location;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
@@ -26,14 +28,21 @@ class Create extends Component
 
     public function store(){
         Validator::make($this->income, [
-            'income_date' => ['required', 'date'],
+            'income_date' => [Auth::user()->role_id != 3 ? 'required' : '', 'date'],
             'cash' => ['required_without_all:non_cash', 'numeric', 'max:1000000'],
             'non_cash' => ['required_without_all:cash', 'numeric', 'max:1000000'],
             'income_type_id' => ['required', 'not_in:0', 'exists:income_types,id'],
             'description' => ['required_if:income_type_id,1', 'string'],
             'excerpt_date' => ['date'],
             'excerpt_status' => ['numeric', 'max:1000000'],
-            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                            function($att, $val, $fail){
+                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                                    $fail('Odabrana je nedozvoljena lokacija.');
+                                }
+                            }]
         ], [
             'max' => 'Prevelika vrednost.',
             'income_date.required' => 'Datum je obavezan.',
@@ -56,6 +65,17 @@ class Create extends Component
             }
         }
 
+        if(Auth::user()->role_id == 3){
+            $this->income["location_id"] = Auth::user()->location_id;
+            $this->income["income_date"] = Carbon::now()->toDateString('YYYY-mm-dd');
+        }
+
+        $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
+        if(!$state){
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Nije postavljena dnevna tabela za danas za ovu lokaciju!']);
+            return;
+        }
+
         try {
             DB::beginTransaction();
             $newIncome = Income::create($this->income);
@@ -73,7 +93,7 @@ class Create extends Component
     {
         return view('livewire.incomes.create', [
             "incomeTypes" => IncomeType::all(),
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

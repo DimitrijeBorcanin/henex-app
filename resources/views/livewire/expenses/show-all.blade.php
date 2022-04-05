@@ -13,6 +13,7 @@
 
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <div class="flex justify-between">
+            @if(Auth::user()->role_id != 3)
             <div class="w-full mb-3 px-3 md:px-0 flex">
                 <div class="w-1/5 mr-2">
                     <x-jet-label for="date_from" value="Datum od" />
@@ -44,17 +45,21 @@
                     </select>
                 </div>
             </div>
+            @endif
             <div class="flex">
-                <div onClick="window.location='{{route('expenses.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
-                    <i class="fa-solid fa-plus grow-0"></i>
+                <div onClick="window.location='{{route('expenses.create')}}'" class="mr-3 @if(Auth::user()->role_id == 3) px-3 @else w-12 @endif h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
+                    <i class="fa-solid fa-plus grow-0"></i> @if(Auth::user()->role_id == 3) Dodaj trošak @endif
                 </div>
+                @if(Auth::user()->role_id != 3)
                 <div class="w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white"
                 wire:click="resetPage">
                     <i class="fa-solid fa-arrows-rotate grow-0"></i>
                 </div>
+                @endif
             </div>
         </div>
         
+        @if(Auth::user()->role_id != 3)
         <div wire:loading.remove wire:target="resetPage" class="overflow-x-auto w-full">
             <table class="min-w-full w-full divide-y divide-gray-200 mb-3">
                 <thead>
@@ -91,5 +96,6 @@
             </table>
             {{ $expenses->links('pagination.custom-pagination') }}
         </div>
+        @endif
     </div>
 </div>

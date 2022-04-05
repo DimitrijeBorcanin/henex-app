@@ -38,6 +38,11 @@ class Edit extends Component
 
     public function mount(Technical $technical){
         $this->technical = $technical;
+
+        if(Auth::user()->role_id == 3 && $technical->tech_date != Carbon::now()->toDateString('YYYY-mm-dd')){
+            abort(403);
+        }
+
         $this->setFields();
     }
 
@@ -83,7 +88,14 @@ class Edit extends Component
             'adm' => ['numeric', 'max:1000000'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric', 'max:1000000'],
-            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                            function($att, $val, $fail){
+                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                                    $fail('Odabrana je nedozvoljena lokacija.');
+                                }
+                            }]
         ], [
             'max' => 'Prevelika vrednost.',
             'tech_date.required' => 'Datum je obavezan.',
@@ -104,6 +116,16 @@ class Edit extends Component
             if(empty($value)){
                 $this->technicalFields[$field] = null;
             }
+        }
+
+        if(Auth::user()->role_id == 3){
+            $this->technical['location_id'] = Auth::user()->location_id;
+        }
+
+        $state = DailyState::where('state_date', $this->technical["tech_date"])->where('location_id', $this->technical["location_id"])->first();
+        if(!$state){
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Nije postavljena dnevna tabela za danas za ovu lokaciju!']);
+            return;
         }
 
         try {
@@ -159,7 +181,7 @@ class Edit extends Component
     {
         return view('livewire.technicals.edit', [
             'companies' => InsuranceCompany::all(),
-            'locations' => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

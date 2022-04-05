@@ -3,9 +3,11 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Pregled prihoda
         </h2>
+        @if(Auth::user()->role_id != 3)
         <a href="{{route('incomes.edit', ["income" => $income->id])}}">
             <x-jet-button><i class="fa-solid fa-pen"></i></x-jet-button>
         </a>
+        @endif
     </div>
 </x-slot>
 

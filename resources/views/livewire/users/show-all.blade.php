@@ -72,7 +72,7 @@
                     <x-jet-label for="locations" value="Lokacija" />
                     <select multiple wire:model.defer="user.locations" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="locations">
                         @foreach($locations as $location)
-                                <option value="{{$location->id}}">{{$location->name}}</option>
+                                <option value="{{$location->id}}" @if($userToUpdate && in_array($location->id, $userToUpdate->locations()->pluck('location_id')->toArray())) selected="selected" @endif>{{$location->name}}</option>
                         @endforeach
                     </select>
                     <x-jet-input-error for="locations" class="mt-2" />

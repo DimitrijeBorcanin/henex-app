@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Tehnički pregled {{ $technical->formatted_tech_date }} - {{$technical->reg_number}}
         </h2>
-        @if(Auth::user()->role_id == 1)
+        @if(Auth::user()->role_id != 3 || (Auth::user()->role_id == 3 && $technical->tech_date == Carbon\Carbon::now()->toDateString('YYYY-mm-dd')))
         <a href="{{route('technicals.edit', ["technical" => $technical->id])}}">
             <x-jet-button><i class="fa-solid fa-pen"></i></x-jet-button>
         </a>

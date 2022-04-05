@@ -35,9 +35,9 @@
                 </div>
             </div>
             <div class="flex">
-                {{-- <div onClick="window.location='{{route('checks.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
+                <div onClick="window.location='{{route('daily-states.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
                     <i class="fa-solid fa-plus grow-0"></i>
-                </div> --}}
+                </div>
                 <div class="w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white"
                 wire:click="resetPage">
                     <i class="fa-solid fa-arrows-rotate grow-0"></i>
@@ -50,10 +50,10 @@
                 <thead>
                     <tr>
                         <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Datum</th>
+                        <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Lokacija</th>
                         <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Početak dana</th>
                         <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Kraj dana</th>
                         <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Iznos registracije</th>
-                        <th class="w-1/6 px-6 py-3 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Broj tehničkih</th>
                         <th class="w-1/6 px-6 py-3 bg-gray-50 text-right text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">Akcije</th>
                     </tr>
                 </thead>
@@ -61,10 +61,10 @@
                     @forelse($states as $state)
                         <tr wire:key="state_{{$state->id}}">
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->formatted_state_date}}</td>
+                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->location->name}}</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->getFormattedAmount('register_start')}}</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->formatted_register_end}} din.</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->formatted_registration_total}} din.</td>
-                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$state->technical_no}}</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap text-right">
                                 <a href="{{route('daily-states.show', ["state" => $state->id])}}">
                                     <x-jet-secondary-button><i class="fa-solid fa-eye"></i></x-jet-secondary-button>

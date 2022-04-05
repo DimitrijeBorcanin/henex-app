@@ -19,7 +19,6 @@
                     <x-jet-input id="search" type="text" class="mt-1 block w-full" wire:model.debounce.500ms="filter.search" />
                 </div>
 
-                @if(Auth::user()->role_id == 1)
                 <div class="w-1/5 mr-2">
                     <x-jet-label for="date_from" value="Datum od" />
                     <x-jet-input id="date_from" type="date" class="mt-1 block w-full" wire:model="filter.date_from" />
@@ -30,6 +29,7 @@
                     <x-jet-input id="date_to" type="date" class="mt-1 block w-full" wire:model="filter.date_to" />
                 </div>
     
+                @if(Auth::user()->role_id != 3)
                 <div class="w-1/5">
                     <x-jet-label for="location" value="Lokacija" />
                     <select wire:model="filter.location" class="form-input rounded-md shadow-sm block mt-1 py-2 w-full" id="location">
@@ -78,7 +78,7 @@
                                 <a href="{{route('technicals.show', ["technical" => $technical->id])}}">
                                     <x-jet-secondary-button><i class="fa-solid fa-eye"></i></x-jet-secondary-button>
                                 </a>
-                                @if(Auth::user()->role_id == 1)
+                                @if(Auth::user()->role_id != 3 || (Auth::user()->role_id == 3 && $technical->tech_date == Carbon\Carbon::now()->toDateString('YYYY-mm-dd')))
                                 <a href="{{route('technicals.edit', ["technical" => $technical->id])}}">
                                     <x-jet-button><i class="fa-solid fa-pen"></i></x-jet-button>
                                 </a>

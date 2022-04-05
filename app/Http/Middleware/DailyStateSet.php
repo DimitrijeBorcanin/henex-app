@@ -21,7 +21,7 @@ class DailyStateSet
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::user()->role_id == 1){
+        if(Auth::user()->role_id != 3){
             return $next($request);
         }
         $stateToday = DailyState::where('state_date', Carbon::now()->toDateString('YYYY-mm-dd'))->where('location_id', Auth::user()->location_id)->first();

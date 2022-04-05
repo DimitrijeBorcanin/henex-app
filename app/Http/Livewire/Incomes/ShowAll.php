@@ -6,6 +6,7 @@ use App\Models\Income;
 use App\Models\IncomeType;
 use App\Models\Location;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -27,6 +28,10 @@ class ShowAll extends Component
     }
 
     private function fetch(){
+        if(Auth::user()->role_id == 3){
+            return [];
+        }
+        
         $incomes = Income::with('incomeType');
 
         if($this->filter["date_from"] != ''){
@@ -46,7 +51,11 @@ class ShowAll extends Component
         }
 
         if($this->filter["location"] != 0){
-            $incomes = $incomes->where('location_id', $this->filter["location"]);
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $incomes = $incomes->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $incomes = $incomes->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
         return $incomes->latest()->paginate($this->pagination);
@@ -61,7 +70,7 @@ class ShowAll extends Component
         return view('livewire.incomes.show-all', [
             'incomes' => $this->fetch(),
             'incomeTypes' => IncomeType::all(),
-            'locations' => Location::all()
+            'locations' => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

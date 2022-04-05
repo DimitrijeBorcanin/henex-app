@@ -15,11 +15,19 @@
                     {{-- <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('general.dashboard') }}
                     </x-jet-nav-link> --}}
+                    @if(Auth::user()->role_id == 3)
                     <x-jet-nav-link class="stateNotSet" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
                         {{ __('Postavi dnevnu tabelu') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
                     </x-jet-nav-link>
+                    @endif
                     <x-jet-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
                         {{ __('Tehnički') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link class="stateSet" href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
+                        {{ __('Troškovi') }}
+                    </x-jet-nav-link>
+                    <x-jet-nav-link class="stateSet" href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
+                        {{ __('Prihodi') }}
                     </x-jet-nav-link>
                     @if(Auth::user()->role_id == 1)
                     <x-jet-nav-link href="{{ route('daily-states') }}" :active="request()->routeIs('daily-states')">
@@ -27,12 +35,6 @@
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                         {{ __('Korisnici') }}
-                    </x-jet-nav-link>
-                    <x-jet-nav-link class="stateSet" href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
-                        {{ __('Troškovi') }}
-                    </x-jet-nav-link>
-                    <x-jet-nav-link class="stateSet" href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
-                        {{ __('Prihodi') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link href="{{ route('checks') }}" :active="request()->routeIs('checks')">
                         {{ __('Čekovi') }}
@@ -164,14 +166,22 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+            {{-- <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('general.dashboard') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
+            </x-jet-responsive-nav-link> --}}
+            @if(Auth::user()->role_id == 3)
+            <x-jet-responsive-nav-link class="stateNotSet" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
                 {{ __('Postavi dnevnu tabelu') }}
             </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
+            @endif
+            <x-jet-responsive-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
                 {{ __('Tehnički') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link class="stateSet" href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
+                {{ __('Troškovi') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link class="stateSet" href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
+                {{ __('Prihodi') }}
             </x-jet-responsive-nav-link>
             @if(Auth::user()->role_id == 1)
             <x-jet-responsive-nav-link href="{{ route('daily-states') }}" :active="request()->routeIs('daily-states')">
@@ -179,12 +189,6 @@
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('users') }}" :active="request()->routeIs('users')">
                 {{ __('Korisnici') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('expenses') }}" :active="request()->routeIs('expenses')">
-                {{ __('Troškovi') }}
-            </x-jet-responsive-nav-link>
-            <x-jet-responsive-nav-link href="{{ route('incomes') }}" :active="request()->routeIs('incomes')">
-                {{ __('Prihodi') }}
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link href="{{ route('checks') }}" :active="request()->routeIs('checks')">
                 {{ __('Čekovi') }}

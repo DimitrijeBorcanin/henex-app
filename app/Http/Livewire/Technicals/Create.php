@@ -55,9 +55,14 @@ class Create extends Component
             'adm' => ['numeric', 'max:1000000'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric', 'max:1000000'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 
-                                Auth::user()->role_id == 1 ? 'not_in:0' : '',
-                                Auth::user()->role_id == 1 ? 'exists:locations,id' : '']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                            function($att, $val, $fail){
+                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                                    $fail('Odabrana je nedozvoljena lokacija.');
+                                }
+                            }]
         ], [
             'max' => 'Prevelika vrednost.',
             'reg_number.required' => 'Registarski broj je obavezan.',
@@ -78,11 +83,17 @@ class Create extends Component
             }
         }
 
-        if(Auth::user()->role_id != 1){
+        if(Auth::user()->role_id == 3){
             $this->technical['location_id'] = Auth::user()->location_id;
         }
 
         $this->technical['tech_date'] = Carbon::now()->format('Y-m-d');
+
+        $state = DailyState::where('state_date', $this->technical["tech_date"])->where('location_id', $this->technical["location_id"])->first();
+        if(!$state){
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Nije postavljena dnevna tabela za danas za ovu lokaciju!']);
+            return;
+        }
 
         try {
             DB::beginTransaction();
@@ -113,8 +124,7 @@ class Create extends Component
             return redirect()->route('technicals.show', ["technical" => $newTechnical->id]);
         } catch (Throwable $e){
             DB::rollBack();
-            dd($e);
-            $this->dispatchBrowserEvent('success', ['message' => 'Došlo je do greške!']);
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Došlo je do greške!']);
         }
         
     }
@@ -123,7 +133,7 @@ class Create extends Component
     {
         return view('livewire.technicals.create', [
             'companies' => InsuranceCompany::all(),
-            'locations' => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

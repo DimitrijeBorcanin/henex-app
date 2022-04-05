@@ -81,7 +81,7 @@ class ShowAll extends Component
         $this->resetPage();
     }
 
-    public function showCreateModal($user = null){
+    public function showCreateModal(User $user = null){
         if($user){
             $this->isEdit = true;
             $this->userToUpdate = $user;
@@ -174,12 +174,22 @@ class ShowAll extends Component
     public function updateUser(){
         $user = User::find($this->userToUpdate["id"]);
 
+        if($this->user["role_id"] == 2){
+            $this->user["location_id"] = null;
+        }
+
+        if($this->user["role_id"] == 3){
+            $this->user["locations"] = [$this->user["location_id"]];
+        }
+
         Validator::make($this->user, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['string', new Password, 'confirmed'],
             'role_id' => ['required', 'exists:roles,id'],
-            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
+            'location_id' => ['required_without:locations', $this->user["role_id"] == 3 ? 'not_in:0' : '', $this->user["role_id"] == 3 ? 'exists:locations,id' : ''],
+            'locations' => ['required_without:location_id', 'array', 'min:1'],
+            'locations.*' => ['not_in:0', 'exists:locations,id']
         ], [
             'name.required' => 'Ime je obavezno.',
             'name.max' => 'Ime je predugačko.',
@@ -192,25 +202,39 @@ class ShowAll extends Component
             'role_id.required' => 'Uloga je obavezna.',
             'role_id.not_in' => 'Uloga nije izabrana.',
             'role_id.exists' => 'Uloga ne postoji u bazi.',
-            'location_id.required' => 'Lokacija je obavezna.',
-            'location_id.exists' => 'Lokacija ne postoji u bazi.'
+            'location_id.required_without' => 'Lokacija je obavezna.',
+            'location_id.not_in' => 'Lokacija nije izabrana.',
+            'location_id.exists' => 'Lokacija ne postoji u bazi.',
+            'locations.required_without' => 'Lokacija je obavezna.',
+            'locations.min' => 'Mora biti izabrana bar 1 lokacija.',
+            'locations.*.not_in' => 'Mora biti izabrana bar 1 lokacija.',
+            'locations.*.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
-        if(!empty($this->user["password"]) || !empty($this->user["password_confirmation"])){
-            $user->update($this->user);
-        } else {
-            $user->update([
-                "name" => $this->user["name"],
-                "email" => $this->user["email"],
-                "role_id" => $this->user["role_id"],
-                "location_id" => $this->user["location_id"],
-            ]);
+        try {
+            if(!empty($this->user["password"]) || !empty($this->user["password_confirmation"])){
+                $user->update($this->user);
+            } else {
+                $user->update([
+                    "name" => $this->user["name"],
+                    "email" => $this->user["email"],
+                    "role_id" => $this->user["role_id"],
+                    "location_id" => $this->user["location_id"],
+                ]);
+            }
+            if($this->user["role_id"] == 2 && count($this->user["locations"]) > 0){
+                $user->locations()->sync($this->user["locations"]);
+            }
+            $this->resetForm();
+            $this->isEdit = false;
+            $this->userToUpdate = null;
+            $this->createModalVisible = false;
+            $this->dispatchBrowserEvent('success', ['message' => 'Uspešno izmenjen korisnik!']);
+        } catch(Throwable $e){
+            DB::rollBack();
         }
-        $this->resetForm();
-        $this->isEdit = false;
-        $this->userToUpdate = null;
-        $this->createModalVisible = false;
-        $this->dispatchBrowserEvent('success', ['message' => 'Uspešno izmenjen korisnik!']);
+
+        
     }
 
     public function showDeleteModal($user){

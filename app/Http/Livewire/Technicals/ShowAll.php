@@ -42,10 +42,12 @@ class ShowAll extends Component
             $technicals = $technicals->where('tech_date', '<=', Carbon::now()->toDateString('YYYY-mm-dd'));
         }
 
-        if($this->filter["location"] != 0 && Auth::user()->role_id == 1){
-            $technicals = $technicals->where('location_id', $this->filter["location"]);
-        } else if(Auth::user()->role_id != 1){
-            $technicals = $technicals->where('location_id', Auth::user()->location_id);
+        if($this->filter["location"] != 0){
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $incomes = $technicals->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $technicals = $technicals->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
         return $technicals->latest()->paginate($this->pagination);
@@ -59,7 +61,7 @@ class ShowAll extends Component
     {
         return view('livewire.technicals.show-all', [
             'technicals' => $this->fetch(),
-            'locations' => Location::all()
+            'locations' => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

@@ -16,11 +16,13 @@
     
         <x-slot name="form">      
             <!-- Date -->
+            @if(Auth::user()->role_id != 3)
             <div class="col-span-6">
                 <x-jet-label for="expense_date" value="Datum" />
                 <x-jet-input id="expense_date" type="date" class="mt-1 block w-full" wire:model.defer="expense.expense_date"/>
                 <x-jet-input-error for="expense_date" class="mt-2" />
             </div>
+            @endif
             <!-- Expense type -->
             <div class="col-span-4">
                 <x-jet-label for="expense_type_id" value="Vrsta troška" />
@@ -44,6 +46,7 @@
                 <x-jet-input-error for="non_cash" class="mt-2" />
             </div>
 
+            @if(Auth::user()->role_id != 3)
             <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="expense.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
@@ -54,6 +57,7 @@
                 </select>
                 <x-jet-input-error for="location_id" class="mt-2" />
             </div>
+            @endif
 
             <div class="col-span-12">
                 <x-jet-label for="description" value="Opis" />
