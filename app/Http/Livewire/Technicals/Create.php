@@ -37,6 +37,8 @@ class Create extends Component
         "total" => ""
     ];
 
+    public $autofillPayment = "";
+
     public function store(){
         
         Validator::make($this->technical, [
@@ -148,6 +150,22 @@ class Create extends Component
             $this->dispatchBrowserEvent('flasherror', ['message' => 'Došlo je do greške!']);
         }
         
+    }
+
+    public function calculateDifference(){
+        $this->technical["reg_cash"] = "";
+        $this->technical["reg_check"] = "";
+        $this->technical["reg_card"] = "";
+        $this->technical["reg_firm"] = "";
+
+        $sumTech = (empty($this->technical["tech_cash"]) ? 0 : $this->technical["tech_cash"])
+                + (empty($this->technical["tech_card"]) ? 0 : $this->technical["tech_card"])
+                + (empty($this->technical["tech_check"]) ? 0 : $this->technical["tech_check"])
+                + (empty($this->technical["tech_invoice"]) ? 0 : $this->technical["tech_invoice"]);
+
+        if($sumTech && $sumTech > 0 && !empty($this->autofillPayment) && $this->technical["total"] && $this->technical["total"] > 0){
+            $this->technical[$this->autofillPayment] = $this->technical["total"] - $sumTech;
+        }
     }
 
     public function render()

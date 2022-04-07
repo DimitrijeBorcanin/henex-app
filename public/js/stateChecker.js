@@ -3,18 +3,18 @@ window.onload = () => {
     function stateLinkToggle(){
         const link = document.getElementsByClassName('stateSetLink');
         if(JSON.parse(localStorage.getItem('isStateSet'))){
-            link[0].style.display = "none";
+            if(link[0]){link[0].style.display = "none";}
         } else {
-            link[0].style.display = "inline-flex";
+            if(link[0]){link[0].style.display = "inline-flex";}
         }
     }
 
     function checkLinkToggle(){
         const link = document.getElementsByClassName('checkSetLink');
         if(JSON.parse(localStorage.getItem('isCheckSet'))){
-            link[0].style.display = "none";
+            if(link[0]){link[0].style.display = "none";}
         } else {
-            link[0].style.display = "inline-flex";
+            if(link[0]){link[0].style.display = "inline-flex";}
         }
     }
 

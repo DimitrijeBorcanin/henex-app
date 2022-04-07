@@ -24,7 +24,7 @@
             <!-- Total -->
             <div class="col-span-2">
                 <x-jet-label for="total" value="Ukupan iznos" />
-                <x-jet-input id="total" type="text" class="mt-1 block w-full" wire:model.defer="technical.total"/>
+                <x-jet-input id="total" type="text" class="mt-1 block w-full" wire:model.defer="technical.total" wire:change="calculateDifference"/>
                 <x-jet-input-error for="total" class="mt-2" />
             </div>
             <!-- Location -->
@@ -53,25 +53,45 @@
             <div class="col-span-12 text-xl mt-3">
                 <h2>Registracija</h2>
             </div>
-            <div class="col-span-3">
-                <x-jet-label for="reg_cash" value="Gotovina" />
-                <x-jet-input id="reg_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_cash"/>
-                <x-jet-input-error for="reg_cash" class="mt-2" />
+            <div class="col-span-3 flex items-center">
+                <div>
+                    <x-jet-label for="reg_cash" value="Gotovina" />
+                    <x-jet-input id="reg_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_cash"/>
+                    <x-jet-input-error for="reg_cash" class="mt-2" />
+                </div>      
+                <div class="ml-3 mt-4">
+                    <input class="radioCheck" type="radio" value="reg_cash" wire:model="autofillPayment" wire:change="calculateDifference" />
+                </div>
             </div>
-            <div class="col-span-3">
-                <x-jet-label for="reg_check" value="Ček" />
-                <x-jet-input id="reg_check" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_check"/>
-                <x-jet-input-error for="reg_check" class="mt-2" />
+            <div class="col-span-3 flex items-center">
+                <div>
+                    <x-jet-label for="reg_check" value="Ček" />
+                    <x-jet-input id="reg_check" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_check"/>
+                    <x-jet-input-error for="reg_check" class="mt-2" />
+                </div>
+                <div class="ml-3 mt-4">
+                    <input class="radioCheck" type="radio" value="reg_check" wire:model="autofillPayment" wire:change="calculateDifference" />
+                </div>
             </div>
-            <div class="col-span-3">
-                <x-jet-label for="reg_card" value="Kartica" />
-                <x-jet-input id="reg_card" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_card"/>
-                <x-jet-input-error for="reg_card" class="mt-2" />
+            <div class="col-span-3 flex items-center">
+                <div>
+                    <x-jet-label for="reg_card" value="Kartica" />
+                    <x-jet-input id="reg_card" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_card"/>
+                    <x-jet-input-error for="reg_card" class="mt-2" />
+                </div>
+                <div class="ml-3 mt-4">
+                    <input class="radioCheck" type="radio" value="reg_card" wire:model="autofillPayment" wire:change="calculateDifference" />
+                </div>
             </div>
-            <div class="col-span-3">
-                <x-jet-label for="reg_firm" value="Faktura" />
-                <x-jet-input id="reg_firm" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_firm"/>
-                <x-jet-input-error for="reg_firm" class="mt-2" />
+            <div class="col-span-3 flex items-center">
+                <div>
+                    <x-jet-label for="reg_firm" value="Faktura" />
+                    <x-jet-input id="reg_firm" type="text" class="mt-1 block w-full" wire:model.defer="technical.reg_firm"/>
+                    <x-jet-input-error for="reg_firm" class="mt-2" />
+                </div>
+                <div class="ml-3 mt-4">
+                    <input class="radioCheck" type="radio" value="reg_firm" wire:model="autofillPayment" wire:change="calculateDifference" />
+                </div>
             </div>
 
             <!-- Tech -->
@@ -79,24 +99,32 @@
                 <h2>Tehnički</h2>
             </div>
             <div class="col-span-3">
-                <x-jet-label for="tech_cash" value="Gotovina" />
-                <x-jet-input id="tech_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_cash"/>
-                <x-jet-input-error for="tech_cash" class="mt-2" />
+                <div>
+                    <x-jet-label for="tech_cash" value="Gotovina" />
+                    <x-jet-input id="tech_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_cash" wire:change="calculateDifference"/>
+                    <x-jet-input-error for="tech_cash" class="mt-2" />
+                </div>
             </div>
             <div class="col-span-3">
-                <x-jet-label for="tech_check" value="Ček" />
-                <x-jet-input id="tech_check" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_check"/>
-                <x-jet-input-error for="tech_check" class="mt-2" />
+                <div>
+                    <x-jet-label for="tech_check" value="Ček" />
+                    <x-jet-input id="tech_check" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_check" wire:change="calculateDifference"/>
+                    <x-jet-input-error for="tech_check" class="mt-2" />
+                </div>
             </div>
             <div class="col-span-3">
-                <x-jet-label for="tech_card" value="Kartica" />
-                <x-jet-input id="tech_card" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_card"/>
-                <x-jet-input-error for="tech_card" class="mt-2" />
+                <div>
+                    <x-jet-label for="tech_card" value="Kartica" />
+                    <x-jet-input id="tech_card" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_card" wire:change="calculateDifference"/>
+                    <x-jet-input-error for="tech_card" class="mt-2" />
+                </div>
             </div>
             <div class="col-span-3">
-                <x-jet-label for="tech_invoice" value="Faktura" />
-                <x-jet-input id="tech_invoice" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_invoice"/>
-                <x-jet-input-error for="tech_invoice" class="mt-2" />
+                <div>
+                    <x-jet-label for="tech_invoice" value="Faktura" />
+                    <x-jet-input id="tech_invoice" type="text" class="mt-1 block w-full" wire:model.defer="technical.tech_invoice" wire:change="calculateDifference"/>
+                    <x-jet-input-error for="tech_invoice" class="mt-2" />
+                </div>
             </div>
 
             <div class="col-span-3">
