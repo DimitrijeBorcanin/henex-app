@@ -9,3 +9,11 @@
 .stateNotSet {
     display:none;
 }
+
+.stateNotSetLink {
+    display:none;
+}
+
+.checkNotSetLink {
+    display:none;
+}

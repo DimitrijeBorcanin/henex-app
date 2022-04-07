@@ -36,6 +36,11 @@ class Check extends Model
         return number_format($this->getStatusEndAttribute(), 2, ',', '.');
     }
 
+    public function updateState($column, $newAmount, $oldAmount = 0){
+        $this->attributes[$column] = $this->attributes[$column] + $newAmount - $oldAmount;
+        $this->save();
+    }
+
     public function location(){
         return $this->belongsTo(Location::class);
     }

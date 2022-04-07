@@ -19,14 +19,20 @@
     
         <x-slot name="form">      
             <!-- Reg Number -->
-            <div class="col-span-6">
+            <div class="col-span-3">
                 <x-jet-label for="reg_number" value="Registarski broj vozila" />
                 <x-jet-input id="reg_number" type="text" class="mt-1 block w-full" wire:model.defer="technicalFields.reg_number"/>
                 <x-jet-input-error for="reg_number" class="mt-2" />
             </div>
+            <!-- Total -->
+            <div class="col-span-2">
+                <x-jet-label for="total" value="Ukupan iznos" />
+                <x-jet-input id="total" type="text" class="mt-1 block w-full" wire:model.defer="technicalFields.total"/>
+                <x-jet-input-error for="total" class="mt-2" />
+            </div>
             <!-- Location -->
             @if(Auth::user()->role_id != 3)
-            <div class="col-span-4">
+            <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="technicalFields.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
                     <option value="0">Izaberite...</option>
@@ -43,6 +49,14 @@
                 <x-jet-input-error for="tech_date" class="mt-2" />
             </div>
             @endif
+            
+            <div class="col-span-2 mt-5">
+                <label for="returning" class="flex items-center mt-3">
+                    <x-jet-checkbox id="returning" wire:model.defer="technicalFields.returning" />
+                    <span class="ml-2 text-sm text-gray-600">Povratnik</span>
+                </label>
+                <x-jet-input-error for="returning" class="mt-2" />
+            </div>
 
             <!-- Reg -->
             <div class="col-span-12 text-xl mt-3">

@@ -33,13 +33,17 @@ class Technical extends Model
                 + $this->attributes['reg_firm'];
     }
 
-    public function getAmountAttribute(){
-        return $this->getTechSumAttribute() + $this->getRegSumAttribute();
+    // public function getAmountAttribute(){
+    //     return $this->getTechSumAttribute() + $this->getRegSumAttribute();
         
-    }
+    // }
 
-    public function getFormattedAmountAttribute(){
-        return number_format($this->getAmountAttribute(), 2, ',', '.');
+    // public function getFormattedAmountAttribute(){
+    //     return number_format($this->getAmountAttribute(), 2, ',', '.');
+    // }
+
+    public function getFormattedTotalAttribute(){
+        return number_format($this->attributes["total"], 2, ',', '.');
     }
 
     public function getFormattedTechDateAttribute(){

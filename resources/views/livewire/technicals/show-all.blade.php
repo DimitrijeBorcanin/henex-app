@@ -70,7 +70,7 @@
                         <tr wire:key="technical_{{$technical->id}}">
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$technical->formatted_tech_date}}</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$technical->reg_number}}</td>
-                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$technical->formatted_amount}} din.</td>
+                            <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$technical->formatted_total ? $technical->formatted_total . ' din.' : '-'}}</td>
                             @if(Auth::user()->role_id == 1)
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$technical->location->name}}</td>
                             @endif

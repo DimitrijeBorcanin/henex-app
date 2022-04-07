@@ -16,8 +16,11 @@
                         {{ __('general.dashboard') }}
                     </x-jet-nav-link> --}}
                     @if(Auth::user()->role_id == 3)
-                    <x-jet-nav-link class="stateNotSet" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
+                    <x-jet-nav-link class="stateNotSetLink" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
                         {{ __('Postavi dnevnu tabelu') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
+                    </x-jet-nav-link>
+                    <x-jet-nav-link class="checkNotSetLink" href="{{ route('checks.create') }}" :active="request()->routeIs('checks.create')">
+                        {{ __('Postavi čekove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
                     </x-jet-nav-link>
                     @endif
                     <x-jet-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
@@ -170,8 +173,11 @@
                 {{ __('general.dashboard') }}
             </x-jet-responsive-nav-link> --}}
             @if(Auth::user()->role_id == 3)
-            <x-jet-responsive-nav-link class="stateNotSet" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
-                {{ __('Postavi dnevnu tabelu') }}
+            <x-jet-responsive-nav-link class="stateNotSetLink" href="{{ route('daily-states.create') }}" :active="request()->routeIs('daily-states.create')">
+                {{ __('Postavi dnevnu tabelu') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link class="checkNotSetLink" href="{{ route('checks.create') }}" :active="request()->routeIs('checks.create')">
+                {{ __('Postavi čekove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
             </x-jet-responsive-nav-link>
             @endif
             <x-jet-responsive-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">

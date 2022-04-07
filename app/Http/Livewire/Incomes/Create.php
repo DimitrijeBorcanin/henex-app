@@ -79,8 +79,10 @@ class Create extends Component
         try {
             DB::beginTransaction();
             $newIncome = Income::create($this->income);
-            $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
-            $state->updateState('incomes_cash', $this->income["cash"]);
+            if($this->income["income_type_id"] != 2){
+                $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
+                $state->updateState('incomes_cash', $this->income["cash"]);
+            }
             DB::commit();
             return redirect()->route('incomes.show', ["income" => $newIncome->id]);
         } catch (Throwable $e){
@@ -92,7 +94,7 @@ class Create extends Component
     public function render()
     {
         return view('livewire.incomes.create', [
-            "incomeTypes" => IncomeType::all(),
+            "incomeTypes" => IncomeType::orderBy('id', 'desc')->get(),
             "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }

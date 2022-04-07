@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Technicals;
 
+use App\Models\Check;
 use App\Models\DailyState;
 use App\Models\InsuranceCompany;
 use App\Models\Location;
@@ -32,29 +33,31 @@ class Create extends Component
         "policy" => "",
         "insurance_company_id" => "",
         "location_id" => "0",
+        "returning" => false,
+        "total" => ""
     ];
 
     public function store(){
-
+        
         Validator::make($this->technical, [
-            'reg_number' => ['required', 'string', 'max:255'],
-            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric', 'max:1000000'],
-            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric', 'max:1000000'],
-            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric', 'max:1000000'],
-            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric', 'max:1000000'],
-            // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric', 'max:1000000'],
-            // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric', 'max:1000000'],
-            // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric', 'max:1000000'],
-            // 'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric', 'max:1000000'],
-            'tech_cash' => ['numeric', 'max:1000000'],
-            'tech_check' => ['numeric', 'max:1000000'],
-            'tech_card' => ['numeric', 'max:1000000'],
-            'tech_invoice' => ['numeric', 'max:1000000'],
-            'agency' => ['numeric', 'max:1000000'],
-            'voucher' => ['numeric', 'max:1000000'],
-            'adm' => ['numeric', 'max:1000000'],
+            'reg_number' => ['string', 'max:255'],
+            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric'],
+            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric'],
+            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric'],
+            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric'],
+            // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric'],
+            // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric'],
+            // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric'],
+            // 'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric'],
+            'tech_cash' => ['numeric'],
+            'tech_check' => ['numeric'],
+            'tech_card' => ['numeric'],
+            'tech_invoice' => ['numeric'],
+            'agency' => ['numeric'],
+            'voucher' => ['numeric'],
+            'adm' => ['numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
-            'policy' => ['numeric', 'max:1000000'],
+            'policy' => ['numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
                             Auth::user()->role_id != 3 ? 'not_in:0' : '',
                             Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
@@ -62,7 +65,9 @@ class Create extends Component
                                 if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
                                     $fail('Odabrana je nedozvoljena lokacija.');
                                 }
-                            }]
+                            }],
+            'returning' => [],
+            'total' => ['numeric']
         ], [
             'max' => 'Prevelika vrednost.',
             'reg_number.required' => 'Registarski broj je obavezan.',
@@ -78,7 +83,7 @@ class Create extends Component
         ])->validate();
 
         foreach($this->technical as $field => $value){
-            if(empty($value)){
+            if(empty($value) && $field != "returning"){
                 $this->technical[$field] = null;
             }
         }
@@ -118,6 +123,22 @@ class Create extends Component
             if($this->technical["voucher"] && $this->technical["voucher"] > 0){
                 $state->voucher_no = $state->voucher_no + 1;
                 $state->save();
+            }
+
+            if(($this->technical["tech_cash"] && $this->technical["tech_cash"] > 0) ||
+                ($this->technical["tech_check"] && $this->technical["tech_check"] > 0) ||
+                ($this->technical["tech_card"] && $this->technical["tech_card"] > 0) ||
+                ($this->technical["tech_invoice"] && $this->technical["tech_invoice"] > 0)){
+                    $state->technical_no = $state->technical_no + 1;
+                    $state->save();
+            }
+
+            $check = Check::where('check_date', $this->technical["tech_date"])->where('location_id', $this->technical["location_id"])->first();
+            if($this->technical["tech_check"] && $this->technical["tech_check"] > 0){
+                $check->updateState('received', $this->technical["tech_check"]);
+            }
+            if($this->technical["reg_check"] && $this->technical["reg_check"] > 0){
+                $check->updateState('received', $this->technical["reg_check"]);
             }
 
             DB::commit();

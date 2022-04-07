@@ -26,7 +26,7 @@ class Create extends Component
     public function store(){
         Validator::make($this->state, [
             'register_start' => ['required', 'numeric'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', Auth::user()->role_id == 1 ? 'not_in:0' : '', Auth::user()->role_id == 1 ? 'exists:locations,id' : '']
         ], [
             'max' => 'Prevelika vrednost.',
             'register_start.required' => 'Stanje kase na početku dana je obavezno.',
@@ -42,6 +42,11 @@ class Create extends Component
 
         $this->state["state_date"] = Carbon::now();
 
+        $exists = DailyState::where('location_id', $this->state["location_id"])->where('state_date', $this->state["state_date"])->exists();
+        if($exists){
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Već je postavljeno početno stanje za današnji dan za ovu lokaciju!']);
+            return;
+        }
         try {
             DB::beginTransaction();
             $insuranceCompanies = InsuranceCompany::all();

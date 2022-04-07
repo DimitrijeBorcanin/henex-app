@@ -99,11 +99,16 @@ class Edit extends Component
             $oldAmount = $this->income->cash;
             $oldLocation = $this->income->location_id;
             $oldDate = $this->income->income_date;
+            $oldType = $this->income->income_type_id;
             $this->income->update($this->incomeFields);
-            $oldState = DailyState::where('state_date', $oldDate)->where('location_id', $oldLocation)->first();
-            $oldState->updateState('incomes_cash', 0, $oldAmount);
-            $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
-            $state->updateState('incomes_cash', $this->income["cash"]);
+            if($oldType != 2){
+                $oldState = DailyState::where('state_date', $oldDate)->where('location_id', $oldLocation)->first();
+                $oldState->updateState('incomes_cash', 0, $oldAmount);
+            }
+            if($this->income["income_type_id"] != 2){
+                $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
+                $state->updateState('incomes_cash', $this->income["cash"]);
+            }
             DB::commit();
             return redirect()->route('incomes.show', ["income" => $this->income->id]);
         } catch (Throwable $e){
@@ -115,7 +120,7 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.incomes.edit', [
-            'incomeTypes' => IncomeType::all(),
+            "incomeTypes" => IncomeType::orderBy('id', 'desc')->get(),
             "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }

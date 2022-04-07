@@ -38,21 +38,22 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/users', Users\ShowAll::class)->name('users')->middleware('admin');
 
     Route::get('/technicals', Technicals\ShowAll::class)->name('technicals');
-    Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create')->middleware('daily-state');
+    Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create')->middleware(['daily-state', 'daily-check']);
     Route::get('/technicals/{technical}', Technicals\Show::class)->name('technicals.show');
     Route::get('/technicals/{technical}/edit', Technicals\Edit::class)->name('technicals.edit');
 
     Route::get('/check-daily-state', [StateCheckController::class, 'checkState']);
+    Route::get('/check-daily-check', [StateCheckController::class, 'checkCheck']);
 
     Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
 
     Route::get('/expenses', Expenses\ShowAll::class)->name('expenses');
-    Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create')->middleware('daily-state');
+    Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create')->middleware(['daily-state', 'daily-check']);
     Route::get('/expenses/{expense}', Expenses\Show::class)->name('expenses.show');
 
     Route::get('/incomes', Incomes\ShowAll::class)->name('incomes');
-    Route::get('/incomes/create', Incomes\Create::class)->name('incomes.create')->middleware('daily-state');
+    Route::get('/incomes/create', Incomes\Create::class)->name('incomes.create')->middleware(['daily-state', 'daily-check']);
     Route::get('/incomes/{income}', Incomes\Show::class)->name('incomes.show');
 
     Route::get('/checks', Checks\ShowAll::class)->name('checks');
