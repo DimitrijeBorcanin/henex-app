@@ -22,6 +22,9 @@
                     <x-jet-nav-link class="checkNotSetLink" href="{{ route('checks.create') }}" :active="request()->routeIs('checks.create')">
                         {{ __('Postavi čekove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
                     </x-jet-nav-link>
+                    <x-jet-nav-link class="slipNotSetLink" href="{{ route('slips.create') }}" :active="request()->routeIs('slips.create')">
+                        {{ __('Postavi slipove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
+                    </x-jet-nav-link>
                     @endif
                     <x-jet-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">
                         {{ __('Tehnički') }}
@@ -178,6 +181,9 @@
             </x-jet-responsive-nav-link>
             <x-jet-responsive-nav-link class="checkNotSetLink" href="{{ route('checks.create') }}" :active="request()->routeIs('checks.create')">
                 {{ __('Postavi čekove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link class="slipNotSetLink" href="{{ route('slips.create') }}" :active="request()->routeIs('slips.create')">
+                {{ __('Postavi slipove') }} <i class="fa-solid fa-triangle-exclamation text-red-500 ml-2"></i>
             </x-jet-responsive-nav-link>
             @endif
             <x-jet-responsive-nav-link class="stateSet" href="{{ route('technicals') }}" :active="request()->routeIs('technicals')">

@@ -42,7 +42,7 @@ class Create extends Component
             'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
-        if(Auth::user()->role_id != 1){
+        if(Auth::user()->role_id == 3){
             $this->state["location_id"] = Auth::user()->location_id;
         }
 

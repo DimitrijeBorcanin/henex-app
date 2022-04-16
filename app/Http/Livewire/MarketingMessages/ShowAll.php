@@ -4,6 +4,7 @@ namespace App\Http\Livewire\MarketingMessages;
 
 use App\Models\Location;
 use App\Models\MarketingMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -154,7 +155,7 @@ class ShowAll extends Component
     {
         return view('livewire.marketing-messages.show-all', [
             "messages" => $this->fetch(),
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

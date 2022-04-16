@@ -45,6 +45,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/check-daily-state', [StateCheckController::class, 'checkState']);
     Route::get('/check-daily-check', [StateCheckController::class, 'checkCheck']);
+    Route::get('/check-daily-slip', [StateCheckController::class, 'checkSlip']);
 
     Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');

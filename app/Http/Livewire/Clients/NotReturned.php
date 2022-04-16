@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Clients;
 use App\Models\Client;
 use App\Models\Location;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -51,7 +52,7 @@ class NotReturned extends Component
     {
         return view('livewire.clients.not-returned', [
             "notReturned" => $this->fetchNotReturned(),
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

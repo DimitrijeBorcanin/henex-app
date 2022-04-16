@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Checks;
 
 use App\Models\Check;
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 
@@ -40,7 +41,14 @@ class Edit extends Component
             'status_start' => ['required', 'numeric', 'max:1000000'],
             'received' => ['required', 'numeric', 'max:1000000'],
             'debited' => ['required', 'numeric', 'max:1000000'],
-            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }]
         ], [
             'max' => 'Prevelika vrednost.',
             'check_date.required' => 'Datum je obavezan.',
@@ -54,6 +62,10 @@ class Edit extends Component
             'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
+        if(Auth::user()->role_id == 3){
+            $this->checkFields["location_id"] = Auth::user()->location_id;
+        }
+
         $this->check->update($this->checkFields);
 
         return redirect()->route('checks.show', ["check" => $this->check->id]);
@@ -62,7 +74,7 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.checks.edit', [
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

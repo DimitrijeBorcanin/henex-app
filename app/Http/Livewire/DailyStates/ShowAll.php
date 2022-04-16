@@ -5,6 +5,7 @@ namespace App\Http\Livewire\DailyStates;
 use App\Models\DailyState;
 use App\Models\Location;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -54,7 +55,7 @@ class ShowAll extends Component
     {
         return view('livewire.daily-states.show-all', [
             "states" => $this->fetch(),
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

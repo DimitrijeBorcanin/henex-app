@@ -77,7 +77,7 @@ class Edit extends Component
             }
         }
 
-        if(Auth::user()->role_id != 1){
+        if(Auth::user()->role_id == 3){
             $this->client["location_id"] = Auth::user()->location_id;
         }
 
@@ -89,7 +89,7 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.clients.edit', [
-            "locations" => Location::all()
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }
