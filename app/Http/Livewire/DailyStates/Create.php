@@ -26,7 +26,14 @@ class Create extends Component
     public function store(){
         Validator::make($this->state, [
             'register_start' => ['required', 'numeric'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', Auth::user()->role_id == 1 ? 'not_in:0' : '', Auth::user()->role_id == 1 ? 'exists:locations,id' : '']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }]
         ], [
             'max' => 'Prevelika vrednost.',
             'register_start.required' => 'Stanje kase na početku dana je obavezno.',
@@ -64,10 +71,10 @@ class Create extends Component
     }
 
     public function getPreviousState(){
-        if(Auth::user()->role_id == 1 && $this->state["location_id"] == 0){
+        if(Auth::user()->role_id != 3 && $this->state["location_id"] == 0){
             return;
         }
-        $loc = Auth::user()->role_id == 1 ? $this->state["location_id"] : Auth::user()->location_id;
+        $loc = Auth::user()->role_id != 3 ? $this->state["location_id"] : Auth::user()->location_id;
         $today = Carbon::now();
         switch($today->dayOfWeek){
             case 1:

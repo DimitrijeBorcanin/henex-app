@@ -24,7 +24,14 @@ class Create extends Component
         Validator::make($this->client, [
             'first_date' => ['required', 'date'],
             'full_name' => ['required', 'max:255'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }]
         ], [
             'first_date.required' => 'Datum je obavezan.',
             'first_date.date' => 'Datum nije u dobrom formatu.',

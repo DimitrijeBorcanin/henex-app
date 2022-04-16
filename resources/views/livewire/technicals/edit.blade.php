@@ -123,6 +123,11 @@
                 <x-jet-input id="adm" type="text" class="mt-1 block w-full" wire:model.defer="technicalFields.adm"/>
                 <x-jet-input-error for="adm" class="mt-2" />
             </div>
+            <div class="col-span-3">
+                <x-jet-label for="adm_non_cash" value="ADM bezgotovina" />
+                <x-jet-input id="adm_non_cash" type="text" class="mt-1 block w-full" wire:model.defer="technicalFields.adm_non_cash"/>
+                <x-jet-input-error for="adm_non_cash" class="mt-2" />
+            </div>
 
             <!-- Insurance company -->
             <div class="col-span-12 text-xl mt-3">

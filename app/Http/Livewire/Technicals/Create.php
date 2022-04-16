@@ -30,6 +30,7 @@ class Create extends Component
         "agency" => "",
         "voucher" => "",
         "adm" => "",
+        "adm_non_cash" => "",
         "policy" => "",
         "insurance_company_id" => "",
         "location_id" => "0",
@@ -58,6 +59,7 @@ class Create extends Component
             'agency' => ['numeric'],
             'voucher' => ['numeric'],
             'adm' => ['numeric'],
+            'adm_non_cash' => ['numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
@@ -119,6 +121,7 @@ class Create extends Component
             $state->updateState('agency', $this->technical["agency"]);
             $state->updateState('voucher', $this->technical["voucher"]);
             $state->updateState('adm', $this->technical["adm"]);
+            $state->updateState('adm_non_cash', $this->technical["adm_non_cash"]);
 
             $state->updatePolicy($this->technical["insurance_company_id"], $this->technical["policy"]);
 

@@ -30,13 +30,13 @@ class ShowAll extends Component
     private function fetch(){
         $technicals = Technical::with('location')->where('reg_number', 'like', '%'.$this->filter["search"].'%');
 
-        if($this->filter["date_from"] != '' && Auth::user()->role_id == 1){
+        if($this->filter["date_from"] != ''){ // && Auth::user()->role_id == 1
             $technicals = $technicals->where('tech_date', '>=', $this->filter["date_from"]);
         } else {
             $technicals = $technicals->where('tech_date', '>=', Carbon::now()->toDateString('YYYY-mm-dd'));
         }
 
-        if($this->filter["date_to"] != '' && Auth::user()->role_id == 1){
+        if($this->filter["date_to"] != ''){ // && Auth::user()->role_id == 1
             $technicals = $technicals->where('tech_date', '<=', $this->filter["date_to"]);
         } else {
             $technicals = $technicals->where('tech_date', '<=', Carbon::now()->toDateString('YYYY-mm-dd'));

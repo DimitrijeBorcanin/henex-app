@@ -47,7 +47,14 @@ class Edit extends Component
         Validator::make($this->clientFields, [
             'first_date' => ['required', 'date'],
             'full_name' => ['required', 'max:255'],
-            'location_id' => [Auth::user()->role_id == 1 ? 'required' : '', 'not_in:0', 'exists:locations,id'],
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }],
             'last_date' => ['required', 'date', 'after_or_equal:first_date'],
             'reason' => ['max:255']
         ], [

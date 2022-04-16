@@ -68,6 +68,10 @@
             <h2>ADM:</h2>
             <h2 class="text-xl">{{$technical->getFormattedAmount('adm')}}</h2>
         </div>
+        <div class="col-span-3 mt-2">
+            <h2>ADM:</h2>
+            <h2 class="text-xl">{{$technical->getFormattedAmount('adm_non_cash')}}</h2>
+        </div>
 
         <!-- Insurance company -->
         

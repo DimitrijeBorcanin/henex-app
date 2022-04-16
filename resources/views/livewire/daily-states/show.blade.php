@@ -98,6 +98,10 @@
             <h2 class="text-xl">{{$state->getFormattedAmount('adm')}}</h2>
         </div>
         <div class="col-span-3">
+            <h2>ADM bezgotovina:</h2>
+            <h2 class="text-xl">{{$state->getFormattedAmount('adm_non_cash')}}</h2>
+        </div>
+        <div class="col-span-3">
             <h2>Ukupno tehnički:</h2>
             <h2 class="text-xl">{{$state->formatted_tech_total}} din.</h2>
         </div>

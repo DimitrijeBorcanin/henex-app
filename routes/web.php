@@ -9,6 +9,7 @@ use App\Http\Livewire\Clients;
 use App\Http\Livewire\Marketing;
 use App\Http\Livewire\Checks;
 use App\Http\Livewire\DailyStates;
+use App\Http\Livewire\Slips;
 use App\Models\DailyState;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,9 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
 
+    Route::get('/slips/create', Slips\Create::class)->name('slips.create');
+    Route::get('/slips/{state}', Slips\Show::class)->name('slips.show');
+
     Route::get('/expenses', Expenses\ShowAll::class)->name('expenses');
     Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create')->middleware(['daily-state', 'daily-check']);
     Route::get('/expenses/{expense}', Expenses\Show::class)->name('expenses.show');
@@ -70,6 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::middleware(['admin'])->group(function(){
         Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
         // Route::get('/daily-states/{state}/edit', DailyStates\Edit::class)->name('daily-states.edit');
+        Route::get('/slips', Slips\ShowAll::class)->name('slips');
 
         Route::get('/expenses/{expense}/edit', Expenses\Edit::class)->name('expenses.edit');
  

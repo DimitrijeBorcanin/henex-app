@@ -32,6 +32,7 @@ class Edit extends Component
         "agency" => "",
         "voucher" => "",
         "adm" => "",
+        "adm_non_cash" => "",
         "policy" => "",
         "insurance_company_id" => "0",
         "location_id" => "0",
@@ -64,6 +65,7 @@ class Edit extends Component
             "agency" => $this->technical->agency ?? '',
             "voucher" => $this->technical->voucher ?? '',
             "adm" => $this->technical->adm ?? '',
+            "adm_non_cash" => $this->technical->adm_non_cash ?? '',
             "policy" => $this->technical->policy,
             "insurance_company_id" => $this->technical->insurance_company_id ?? '0',
             "location_id" => $this->technical->location_id,
@@ -91,6 +93,7 @@ class Edit extends Component
             'agency' => ['numeric'],
             'voucher' => ['numeric'],
             'adm' => ['numeric'],
+            'adm_non_cash' => ['numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
@@ -150,6 +153,7 @@ class Edit extends Component
             $oldState->updateState('agency', 0, $this->technical["agency"]);
             $oldState->updateState('voucher', 0, $this->technical["voucher"]);
             $oldState->updateState('adm', 0, $this->technical["adm"]);
+            $oldState->updateState('adm_non_cash', 0, $this->technical["adm_non_cash"]);
 
             if($this->technical["voucher"] && $this->technical["voucher"] > 0){
                 $oldState->voucher_no = $oldState->voucher_no - 1;
@@ -186,6 +190,7 @@ class Edit extends Component
             $state->updateState('agency', $this->technical["agency"]);
             $state->updateState('voucher', $this->technical["voucher"]);
             $state->updateState('adm', $this->technical["adm"]);
+            $state->updateState('adm_non_cash', $this->technical["adm_non_cash"]);
 
             if($this->technical["voucher"] && $this->technical["voucher"] > 0){
                 $state->voucher_no = $state->voucher_no + 1;

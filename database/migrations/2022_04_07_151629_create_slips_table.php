@@ -15,6 +15,10 @@ class CreateSlipsTable extends Migration
     {
         Schema::create('slips', function (Blueprint $table) {
             $table->id();
+            $table->date('slip_date');
+            $table->decimal('status_start');
+            $table->decimal('received');
+            $table->foreignId('location_id')->constrained();
             $table->timestamps();
         });
     }
