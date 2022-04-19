@@ -19,7 +19,8 @@ class Technical extends Model
                 + $this->attributes['tech_invoice'] 
                 + $this->attributes['agency']
                 + $this->attributes['voucher']
-                + $this->attributes['adm'];
+                + $this->attributes['adm']
+                + $this->attributes['adm_non_cash'];
     }
 
     public function getFormattedTechSumAttribute(){

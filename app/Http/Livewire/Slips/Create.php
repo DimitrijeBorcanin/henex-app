@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Slips;
 
+use App\Models\Location;
 use App\Models\Slip;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class Create extends Component
     ];
 
     public function mount(){
-        $this->getPreviousState();
+        $this->checkLastDay();
     }
 
     public function store(){
@@ -75,6 +76,9 @@ class Create extends Component
     }
     public function render()
     {
-        return view('livewire.slips.create');
+        return view('livewire.slips.create', 
+        [
+            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
+        ]);
     }
 }

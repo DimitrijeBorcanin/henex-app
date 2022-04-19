@@ -79,13 +79,14 @@ class Create extends Component
         try {
             DB::beginTransaction();
             $newIncome = Income::create($this->income);
-            if($this->income["income_type_id"] != 2){
+            if($this->income["income_type_id"] != 2 && !empty($this->income["cash"])){
                 $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
                 $state->updateState('incomes_cash', $this->income["cash"]);
             }
             DB::commit();
             return redirect()->route('incomes.show', ["income" => $newIncome->id]);
         } catch (Throwable $e){
+            dd($e->getMessage());
             DB::rollBack();
         }
         

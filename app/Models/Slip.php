@@ -13,7 +13,7 @@ class Slip extends Model
     protected $guarded = ["id", "created_at", "updated_at"];
 
     public function getFormattedSlipDateAttribute(){
-        return Carbon::parse($this->attributes['check_date'])->format('d.m.Y.');
+        return Carbon::parse($this->attributes['slip_date'])->format('d.m.Y.');
     }
 
     public function getFormattedStatusStartAttribute(){

@@ -82,7 +82,7 @@ class ShowAll extends Component
     }
 
     public function showCreateModal(User $user = null){
-        if($user){
+        if($user != null){
             $this->isEdit = true;
             $this->userToUpdate = $user;
             $this->user = [

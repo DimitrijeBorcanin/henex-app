@@ -45,13 +45,13 @@ Route::middleware(['auth:sanctum'])->group(function(){
 
     Route::get('/check-daily-state', [StateCheckController::class, 'checkState']);
     Route::get('/check-daily-check', [StateCheckController::class, 'checkCheck']);
-    Route::get('/check-daily-slip', [StateCheckController::class, 'checkSlip']);
+    Route::get('/check-daily-slip', [StateCheckController::class, 'slipCheck']);
 
     Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
 
     Route::get('/slips/create', Slips\Create::class)->name('slips.create');
-    Route::get('/slips/{state}', Slips\Show::class)->name('slips.show');
+    Route::get('/slips/{slip}', Slips\Show::class)->name('slips.show');
 
     Route::get('/expenses', Expenses\ShowAll::class)->name('expenses');
     Route::get('/expenses/create', Expenses\Create::class)->name('expenses.create')->middleware(['daily-state', 'daily-check']);

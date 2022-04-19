@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="flex">
-                <div onClick="window.location='{{route('checks.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
+                <div onClick="window.location='{{route('slips.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">
                     <i class="fa-solid fa-plus grow-0"></i>
                 </div>
                 <div class="w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white"
@@ -64,7 +64,7 @@
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$slip->formatted_received}} din.</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap">{{$slip->formatted_status_end}} din.</td>
                             <td class="px-6 py-4 text-sm whitespace-no-wrap text-right">
-                                <a href="{{route('slips.show', ["check" => $check->id])}}">
+                                <a href="{{route('slips.show', ["slip" => $slip->id])}}">
                                     <x-jet-secondary-button><i class="fa-solid fa-eye"></i></x-jet-secondary-button>
                                 </a>
                                 {{-- <a href="{{route('slips.edit', ["check" => $check->id])}}">

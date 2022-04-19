@@ -1,6 +1,6 @@
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Novi čekovi
+        Novi slipovi
     </h2>
 </x-slot>
 
@@ -11,7 +11,7 @@
         </x-slot>
     
         <x-slot name="description">
-            Odabirom datuma, automatski će se uneti stanje prethodnog radnog dana, ako takav dan postoji u bazi.
+            Automatski će se uneti stanje prethodnog radnog dana, ako takav dan postoji u bazi.
         </x-slot>
     
         <x-slot name="form">

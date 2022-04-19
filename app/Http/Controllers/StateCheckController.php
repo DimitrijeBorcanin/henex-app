@@ -47,6 +47,6 @@ class StateCheckController extends Controller
 
         $slipToday = Slip::where('slip_date', $today)->where('location_id', Auth::user()->location_id)->exists();
 
-        return response()->json(["isCheckSet" => $slipToday]);
+        return response()->json(["isSlipSet" => $slipToday]);
     }
 }
