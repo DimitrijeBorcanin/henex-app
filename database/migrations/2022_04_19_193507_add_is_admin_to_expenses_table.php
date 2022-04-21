@@ -13,7 +13,7 @@ class AddIsAdminToExpensesTable extends Migration
      */
     public function up()
     {
-        Schema::table('expenses', function (Blueprint $table) {
+        Schema::table('expense_types', function (Blueprint $table) {
             $table->boolean('is_admin')->default(0);
         });
     }
@@ -25,7 +25,7 @@ class AddIsAdminToExpensesTable extends Migration
      */
     public function down()
     {
-        Schema::table('expenses', function (Blueprint $table) {
+        Schema::table('expense_types', function (Blueprint $table) {
             //
         });
     }
