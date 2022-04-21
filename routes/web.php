@@ -76,6 +76,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
         Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
         // Route::get('/daily-states/{state}/edit', DailyStates\Edit::class)->name('daily-states.edit');
         Route::get('/slips', Slips\ShowAll::class)->name('slips');
+        Route::get('/slips/{slip}/edit', Slips\Edit::class)->name('slips.edit');
 
         Route::get('/expenses/{expense}/edit', Expenses\Edit::class)->name('expenses.edit');
  

@@ -20,5 +20,8 @@
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        <script type="text/javascript">
+            localStorage.clear();
+        </script>
     </body>
 </html>

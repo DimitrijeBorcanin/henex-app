@@ -67,9 +67,9 @@
                                 <a href="{{route('slips.show', ["slip" => $slip->id])}}">
                                     <x-jet-secondary-button><i class="fa-solid fa-eye"></i></x-jet-secondary-button>
                                 </a>
-                                {{-- <a href="{{route('slips.edit', ["check" => $check->id])}}">
+                                <a href="{{route('slips.edit', ["slip" => $slip->id])}}">
                                     <x-jet-button><i class="fa-solid fa-pen"></i></x-jet-button>
-                                </a> --}}
+                                </a>
                             </td>
                         </tr>
                     @empty 

@@ -20,12 +20,24 @@
             <h2 class="text-xl">{{$state->location->name}}</h2>
         </div>
         <div class="col-span-3">
+            <h2>Ukupno naplaćene registracije:</h2>
+            <h2 class="text-xl">{{$state->formatted_registration_total}} din.</h2>
+        </div>
+        <div class="col-span-3">
             <h2>Stanje kase na početku dana:</h2>
             <h2 class="text-xl">{{$state->getFormattedAmount('register_start')}}</h2>
         </div>
         <div class="col-span-3">
             <h2>Stanje kase na kraju dana:</h2>
             <h2 class="text-xl">{{$state->formatted_register_end}} din.</h2>
+        </div>
+        <div class="col-span-3">
+            <h2>Stanje sefa na početku dana:</h2>
+            <h2 class="text-xl">{{$state->getFormattedAmount('safe_start')}}</h2>
+        </div>
+        <div class="col-span-3">
+            <h2>Stanje sefa na kraju dana:</h2>
+            <h2 class="text-xl">{{$state->formatted_safe_end}} din.</h2>
         </div>
         <div class="col-span-3">
             <h2>Rashod gotovina iznos:</h2>

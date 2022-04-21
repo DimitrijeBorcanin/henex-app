@@ -34,6 +34,7 @@ class Edit extends Component
         "adm" => "",
         "adm_non_cash" => "",
         "policy" => "",
+        "policy_check" => "",
         "insurance_company_id" => "0",
         "location_id" => "0",
         "returning" => "",
@@ -67,6 +68,7 @@ class Edit extends Component
             "adm" => $this->technical->adm ?? '',
             "adm_non_cash" => $this->technical->adm_non_cash ?? '',
             "policy" => $this->technical->policy,
+            "policy_check" => $this->technical->policy_check,
             "insurance_company_id" => $this->technical->insurance_company_id ?? '0',
             "location_id" => $this->technical->location_id,
             "returning" => $this->technical->returning ?? false,
@@ -96,6 +98,7 @@ class Edit extends Component
             'adm_non_cash' => ['numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
+            'policy_check' => ['numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
                             Auth::user()->role_id != 3 ? 'not_in:0' : '',
                             Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
@@ -175,6 +178,9 @@ class Edit extends Component
             if($this->technical["reg_check"] && $this->technical["reg_check"] > 0){
                 $oldCheck->updateState('received', 0, $this->technical["reg_check"]);
             }
+            if($this->technical["policy_check"] && $this->technical["policy_check"] > 0){
+                $oldCheck->updateState('debited', 0, $this->technical["policy_check"]);
+            }
 
             $this->technical->update($this->technicalFields);
             
@@ -211,6 +217,9 @@ class Edit extends Component
             }
             if($this->technical["reg_check"] && $this->technical["reg_check"] > 0){
                 $check->updateState('received', $this->technical["reg_check"]);
+            }
+            if($this->technical["policy_check"] && $this->technical["policy_check"] > 0){
+                $check->updateState('debited', $this->technical["policy_check"]);
             }
 
             DB::commit();

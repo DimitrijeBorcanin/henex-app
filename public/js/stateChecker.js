@@ -1,7 +1,7 @@
 window.onload = () => {
 
     function stateLinkToggle(){
-        const link = document.getElementsByClassName('stateSetLink');
+        const link = document.getElementsByClassName('stateNotSetLink');
         if(JSON.parse(localStorage.getItem('isStateSet'))){
             if(link[0]){link[0].style.display = "none";}
         } else {
@@ -10,7 +10,7 @@ window.onload = () => {
     }
 
     function checkLinkToggle(){
-        const link = document.getElementsByClassName('checkSetLink');
+        const link = document.getElementsByClassName('checkNotSetLink');
         if(JSON.parse(localStorage.getItem('isCheckSet'))){
             if(link[0]){link[0].style.display = "none";}
         } else {
@@ -19,7 +19,7 @@ window.onload = () => {
     }
 
     function slipLinkToggle(){
-        const link = document.getElementsByClassName('slipSetLink');
+        const link = document.getElementsByClassName('slipNotSetLink');
         if(JSON.parse(localStorage.getItem('isSlipSet'))){
             if(link[0]){link[0].style.display = "none";}
         } else {
@@ -103,6 +103,10 @@ window.onload = () => {
             stateLinkToggle();
             checkLinkToggle();
             slipLinkToggle();
+
+            if(data.isStateSet){
+                location.reload()
+            }
         })
 
     }
@@ -140,11 +144,15 @@ window.onload = () => {
             stateLinkToggle();
             checkLinkToggle();
             slipLinkToggle();
+
+            if(data.isCheckSet){
+                location.reload();
+            }
         })
 
     }
 
-    if(!dateChecked || dateChecked !== today || !isCheckSet){
+    if(!dateChecked || dateChecked !== today || !isSlipSet){
 
         fetch('/check-daily-slip')
         .then(response => response.json())
@@ -177,6 +185,10 @@ window.onload = () => {
             stateLinkToggle();
             checkLinkToggle();
             slipLinkToggle();
+
+            if(data.isSlipSet){
+                location.reload();
+            }
         })
 
     }

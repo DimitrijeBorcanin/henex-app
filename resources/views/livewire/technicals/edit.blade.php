@@ -148,6 +148,11 @@
                 </select>
                 <x-jet-input-error for="insurance_company_id" class="mt-2" />
             </div>
+            <div class="col-span-3">
+                <x-jet-label for="policy_check" value="Ček" />
+                <x-jet-input id="policy_check" type="text" class="mt-1 block w-full" wire:model.defer="technicalFields.policy_check"/>
+                <x-jet-input-error for="policy_check" class="mt-2" />
+            </div>
             
         </x-slot>
     

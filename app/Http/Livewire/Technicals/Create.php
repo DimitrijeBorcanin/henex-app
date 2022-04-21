@@ -32,6 +32,7 @@ class Create extends Component
         "adm" => "",
         "adm_non_cash" => "",
         "policy" => "",
+        "policy_check" => "",
         "insurance_company_id" => "",
         "location_id" => "0",
         "returning" => false,
@@ -44,24 +45,25 @@ class Create extends Component
         
         Validator::make($this->technical, [
             'reg_number' => ['string', 'max:255'],
-            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric'],
-            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric'],
-            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric'],
-            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric'],
+            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
             // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric'],
             // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric'],
             // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric'],
             // 'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric'],
-            'tech_cash' => ['numeric'],
-            'tech_check' => ['numeric'],
-            'tech_card' => ['numeric'],
-            'tech_invoice' => ['numeric'],
-            'agency' => ['numeric'],
-            'voucher' => ['numeric'],
-            'adm' => ['numeric'],
-            'adm_non_cash' => ['numeric'],
+            'tech_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'tech_check' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_cash,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'tech_card' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_cash,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'tech_invoice' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_cash,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'agency' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,adm_non_cash', 'numeric'],
+            'voucher' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,agency,adm,adm_non_cash', 'numeric'],
+            'adm' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,agency,adm_non_cash', 'numeric'],
+            'adm_non_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,agency', 'numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
+            'policy_check' => ['numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
                             Auth::user()->role_id != 3 ? 'not_in:0' : '',
                             Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
@@ -144,6 +146,9 @@ class Create extends Component
             }
             if($this->technical["reg_check"] && $this->technical["reg_check"] > 0){
                 $check->updateState('received', $this->technical["reg_check"]);
+            }
+            if($this->technical["policy_check"] && $this->technical["policy_check"] > 0){
+                $check->updateState('debited', $this->technical["policy_check"]);
             }
 
             DB::commit();

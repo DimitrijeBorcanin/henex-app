@@ -74,8 +74,14 @@ class Create extends Component
         try {
             DB::beginTransaction();
             $newExpense = Expense::create($this->expense);
-            $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
-            $state->updateState('expenses_cash', $this->expense["cash"]);
+            
+            if($this->expense["expense_type_id"] == 1){
+                $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
+                $state->updateState('safe_received', $this->expense["cash"]);
+            } else {
+                $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
+                $state->updateState('expenses_cash', $this->expense["cash"]); 
+            }
             DB::commit();
             return redirect()->route('expenses.show', ["expense" => $newExpense->id]);
         } catch (Throwable $e){
@@ -86,7 +92,7 @@ class Create extends Component
     public function render()
     {
         return view('livewire.expenses.create', [
-            "expenseTypes" => ExpenseType::all(),
+            "expenseTypes" => Auth::user()->role_id == 1 ? ExpenseType::all() : ExpenseType::where('is_admin', '0')->get(),
             "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }

@@ -70,7 +70,7 @@ class ShowAll extends Component
     {
         return view('livewire.expenses.show-all', [
             'expenses' => $this->fetch(),
-            'expenseTypes' => ExpenseType::all(),
+            "expenseTypes" => Auth::user()->role_id == 1 ? ExpenseType::all() : ExpenseType::where('is_admin', '0')->get(),
             'locations' => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }

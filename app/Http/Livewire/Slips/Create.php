@@ -14,8 +14,6 @@ class Create extends Component
     public $slip = [
         "slip_date" => "",
         "status_start" => "",
-        "received" => "",
-        "debited" => "",
         "location_id" => "0"
     ];
 
@@ -44,12 +42,13 @@ class Create extends Component
         ])->validate();
 
         if(Auth::user()->role_id == 3){
-            $this->state["location_id"] = Auth::user()->location_id;
+            $this->slip["location_id"] = Auth::user()->location_id;
         }
 
-        $this->state["state_date"] = Carbon::now();
+        $this->slip["slip_date"] = Carbon::now();
+        $this->slip["received"] = 0;
 
-        $exists = Slip::where('location_id', $this->state["location_id"])->where('slip_date', $this->state["slip_date"])->exists();
+        $exists = Slip::where('location_id', $this->slip["location_id"])->where('slip_date', $this->slip["slip_date"])->exists();
         if($exists){
             $this->dispatchBrowserEvent('flasherror', ['message' => 'Već je postavljeno početno stanje za današnji dan za ovu lokaciju!']);
             return;
@@ -61,7 +60,11 @@ class Create extends Component
     }
 
     public function checkLastDay(){
-        $today = Carbon::parse($this->slip["slip_date"]);
+        if(Auth::user()->role_id != 3 && $this->slip["location_id"] == 0){
+            return;
+        }
+        $loc = Auth::user()->role_id != 3 ? $this->slip["location_id"] : Auth::user()->location_id;
+        $today = Carbon::now();
         switch($today->dayOfWeek){
             case 1:
                 $lastDay = $today->subDays(3);
@@ -69,9 +72,11 @@ class Create extends Component
             default:
                 $lastDay = $today->subDay();
         }
-        $lastSlip = Slip::where('slip_date', $lastDay->toDateString('YYYY-mm-dd'))->first();
+        $lastSlip = Slip::where('slip_date', $lastDay->toDateString('YYYY-mm-dd'))->where('location_id', $loc)->first();
         if($lastSlip){
             $this->slip["status_start"] = $lastSlip->status_end;
+        } else {
+            $this->slip["status_start"] = "";
         }
     }
     public function render()

@@ -9,7 +9,7 @@ class ExpenseType extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["name"];
+    protected $fillable = ["name", "is_admin"];
 
     public function expenses(){
         return $this->hasMany(Expense::class);

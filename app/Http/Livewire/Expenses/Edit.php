@@ -92,11 +92,21 @@ class Edit extends Component
             $oldAmount = $this->expense->cash;
             $oldLocation = $this->expense->location_id;
             $oldDate = $this->expense->expense_date;
+            $oldType = $this->expense->expense_type_id;
             $this->expense->update($this->expenseFields);
             $oldState = DailyState::where('state_date', $oldDate)->where('location_id', $oldLocation)->first();
-            $oldState->updateState('expenses_cash', 0, $oldAmount);
             $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
-            $state->updateState('expenses_cash', $this->expense["cash"]);
+            if($oldType == 1){
+                $oldState->updateState('safe_received', 0, $oldAmount);
+            } else {
+                $oldState->updateState('expenses_cash', 0, $oldAmount);
+            }
+            if($this->expense->expense_type_id == 1){
+                $state->updateState('safe_received', $this->expense["cash"]);
+            } else {
+                $state->updateState('expenses_cash', $this->expense["cash"]);
+            }
+            
             DB::commit();
             return redirect()->route('expenses.show', ["expense" => $this->expense->id]);
         } catch (Throwable $e){
@@ -107,7 +117,7 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.expenses.edit', [
-            "expenseTypes" => ExpenseType::all(),
+            "expenseTypes" => Auth::user()->role_id == 1 ? ExpenseType::all() : ExpenseType::where('is_admin', '0')->get(),
             "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }

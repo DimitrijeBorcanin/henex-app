@@ -16,6 +16,7 @@ class Create extends Component
 {
     public $state = [
         "register_start" => "",
+        "safe_start" => "",
         "location_id" => "0",
     ];
 
@@ -26,6 +27,7 @@ class Create extends Component
     public function store(){
         Validator::make($this->state, [
             'register_start' => ['required', 'numeric'],
+            'safe_start' => ['required', 'numeric'],
             'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
@@ -37,6 +39,7 @@ class Create extends Component
         ], [
             'max' => 'Prevelika vrednost.',
             'register_start.required' => 'Stanje kase na početku dana je obavezno.',
+            'safe_start.required' => 'Stanje sefa na početku dana je obavezno.',
             'numeric' => 'Mora biti broj.',
             'location.required' => 'Morate izabrati lokaciju.',
             'location.not_in' => 'Morate izabrati lokaciju.',
@@ -86,6 +89,10 @@ class Create extends Component
         $previousState = DailyState::where('state_date', $lastDay->toDateString('YYYY-mm-dd'))->where('location_id', $loc)->first();
         if($previousState){
             $this->state["register_start"] = $previousState->register_end;
+            $this->state["safe_start"] = $previousState->safe_end;
+        } else {
+            $this->state["register_start"] = "";
+            $this->state["safe_start"] = "";
         }
     }
 

@@ -56,7 +56,11 @@ class Create extends Component
     }
 
     public function checkLastDay(){
-        $today = Carbon::parse($this->check["check_date"]);
+        if(Auth::user()->role_id != 3 && $this->slip["location_id"] == 0){
+            return;
+        }
+        $loc = Auth::user()->role_id != 3 ? $this->slip["location_id"] : Auth::user()->location_id;
+        $today = Carbon::now();
         switch($today->dayOfWeek){
             case 1:
                 $lastDay = $today->subDays(3);
@@ -64,9 +68,11 @@ class Create extends Component
             default:
                 $lastDay = $today->subDay();
         }
-        $lastCheck = Check::where('check_date', $lastDay->toDateString('YYYY-mm-dd'))->first();
+        $lastCheck = Check::where('check_date', $lastDay->toDateString('YYYY-mm-dd'))->where('location_id', $loc)->first();
         if($lastCheck){
             $this->check["status_start"] = $lastCheck->status_end;
+        } else {
+            $this->check["status_start"] = "";
         }
     }
 

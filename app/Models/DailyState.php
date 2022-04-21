@@ -10,10 +10,20 @@ class DailyState extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["register_start", "location_id", "state_date"];
+    protected $fillable = ["register_start", "location_id", "state_date", "safe_start"];
 
     public function getFormattedStateDateAttribute(){
         return Carbon::parse($this->attributes['state_date'])->format('d.m.Y.');
+    }
+
+    public function getSafeEndAttribute(){
+        return $this->attributes["safe_start"] +
+                $this->attributes["safe_received"] -
+                $this->attributes["safe_debited"];
+    }
+
+    public function getFormattedSafeEdnAttribute(){
+        return number_format($this->getSafeEndAttribute(), 2, ',', '.');
     }
 
     public function getRegisterEndAttribute(){
