@@ -26,6 +26,15 @@
                 <x-jet-input id="received" type="text" class="mt-1 block w-full" wire:model.defer="slipFields.received" wire:loading.attr="disabled" />
                 <x-jet-input-error for="received" class="mt-2" />
             </div>
+            @if(Auth::user()->role_id != 3)
+            <div class="col-span-3">
+                <x-jet-label for="location_id" value="Lokacija" />
+                <select class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id" disabled>
+                    <option>{{$slip->location->name}}</option>
+                </select>
+                <x-jet-input-error for="location_id" class="mt-2" />
+            </div>
+            @endif
         </x-slot>
     
         <x-slot name="actions">

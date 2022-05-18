@@ -36,9 +36,9 @@ class Edit extends Component
             'max' => 'Prevelika vrednost.',
             'numeric' => 'Mora biti broj.',
             'status_start.required' => 'Početno stanje je obavezno.',
-            'location.required' => 'Morate izabrati lokaciju.',
-            'location.not_in' => 'Morate izabrati lokaciju.',
-            'location.exists' => 'Lokacija ne postoji u bazi.',
+            // 'location.required' => 'Morate izabrati lokaciju.',
+            // 'location.not_in' => 'Morate izabrati lokaciju.',
+            // 'location.exists' => 'Lokacija ne postoji u bazi.',
             'received.required' => 'Morate uneti vrednost za primljeno.'
         ])->validate();
 

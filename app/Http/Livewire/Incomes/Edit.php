@@ -41,7 +41,7 @@ class Edit extends Component
             "description" => $this->income->description ?? '',
             "excerpt_date" => $this->income->excerpt_date ?? '',
             "excerpt_status" => $this->income->excerpt_status ?? '',
-            "location_id" => $this->income->location_id ?? ''
+            // "location_id" => $this->income->location_id ?? ''
         ];
     }
 
@@ -54,14 +54,14 @@ class Edit extends Component
             'description' => ['required_if:income_type_id,1', 'string'],
             'excerpt_date' => ['date'],
             'excerpt_status' => ['numeric', 'max:1000000'],
-            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
-                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
-                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
-                            function($att, $val, $fail){
-                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('id')->toArray())){
-                                    $fail('Odabrana je nedozvoljena lokacija.');
-                                }
-                            }]
+            // 'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+            //                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
+            //                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+            //                 function($att, $val, $fail){
+            //                     if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('id')->toArray())){
+            //                         $fail('Odabrana je nedozvoljena lokacija.');
+            //                     }
+            //                 }]
         ], [
             'max' => 'Prevelika vrednost.',
             'income_date.required' => 'Datum je obavezan.',
@@ -73,9 +73,9 @@ class Edit extends Component
             'numeric' => 'Mora biti broj.',
             'description.required_if' => 'Dodatan opis mora da postoji ako je izabrano OSTALO.',
             'excerpt_date.date' => 'Datum izvoda je u lošem formatu.',
-            'location.required' => 'Morate izabrati lokaciju.',
-            'location.not_in' => 'Morate izabrati lokaciju.',
-            'location.exists' => 'Lokacija ne postoji u bazi.'
+            // 'location.required' => 'Morate izabrati lokaciju.',
+            // 'location.not_in' => 'Morate izabrati lokaciju.',
+            // 'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
         foreach($this->incomeFields as $field => $value){
@@ -84,9 +84,9 @@ class Edit extends Component
             }
         }
 
-        if(Auth::user()->role_id == 3){
-            $this->income["location_id"] = Auth::user()->location_id;
-        }
+        // if(Auth::user()->role_id == 3){
+        //     $this->income["location_id"] = Auth::user()->location_id;
+        // }
 
         $state = DailyState::where('state_date', $this->income["income_date"])->where('location_id', $this->income["location_id"])->first();
         if(!$state){
@@ -121,7 +121,7 @@ class Edit extends Component
     {
         return view('livewire.incomes.edit', [
             "incomeTypes" => IncomeType::orderBy('id', 'desc')->get(),
-            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
+            // "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

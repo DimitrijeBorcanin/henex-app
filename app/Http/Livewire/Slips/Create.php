@@ -12,7 +12,7 @@ use Livewire\Component;
 class Create extends Component
 {
     public $slip = [
-        "slip_date" => "",
+        // "slip_date" => "",
         "status_start" => "",
         "location_id" => "0"
     ];
@@ -45,7 +45,7 @@ class Create extends Component
             $this->slip["location_id"] = Auth::user()->location_id;
         }
 
-        $this->slip["slip_date"] = Carbon::now();
+        $this->slip["slip_date"] = Carbon::now()->format('Y-m-d');
         $this->slip["received"] = 0;
 
         $exists = Slip::where('location_id', $this->slip["location_id"])->where('slip_date', $this->slip["slip_date"])->exists();

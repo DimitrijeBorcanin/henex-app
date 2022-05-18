@@ -50,7 +50,7 @@ class Create extends Component
             $this->state["location_id"] = Auth::user()->location_id;
         }
 
-        $this->state["state_date"] = Carbon::now();
+        $this->state["state_date"] = Carbon::now()->format('Y-m-d');
 
         $exists = DailyState::where('location_id', $this->state["location_id"])->where('state_date', $this->state["state_date"])->exists();
         if($exists){

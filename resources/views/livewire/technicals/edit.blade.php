@@ -34,11 +34,8 @@
             @if(Auth::user()->role_id != 3)
             <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
-                <select wire:model.defer="technicalFields.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
-                    <option value="0">Izaberite...</option>
-                    @foreach($locations as $location)
-                            <option value="{{$location->id}}">{{$location->name}}</option>
-                    @endforeach
+                <select class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id" disabled>
+                    <option>{{$technical->location->name}}</option>
                 </select>
                 <x-jet-input-error for="location_id" class="mt-2" />
             </div>

@@ -22,7 +22,7 @@ class Edit extends Component
         "cash" => "",
         "non_cash" => "",
         "description" => "",
-        "location_id" => "0"
+        // "location_id" => "0"
     ];
 
     public function mount(Expense $expense){
@@ -48,14 +48,14 @@ class Edit extends Component
             'non_cash' => ['required_without_all:cash', 'numeric', 'max:1000000'],
             'expense_type_id' => ['required', 'not_in:0', 'exists:expense_types,id'],
             'description' => ['required_if:expense_type_id,1', 'string'],
-            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
-                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
-                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
-                            function($att, $val, $fail){
-                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('id')->toArray())){
-                                    $fail('Odabrana je nedozvoljena lokacija.');
-                                }
-                            }]
+            // 'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+            //                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
+            //                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+            //                 function($att, $val, $fail){
+            //                     if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('id')->toArray())){
+            //                         $fail('Odabrana je nedozvoljena lokacija.');
+            //                     }
+            //                 }]
         ], [
             'max' => 'Prevelika vrednost.',
             'expense_date.required' => 'Datum je obavezan.',
@@ -66,9 +66,9 @@ class Edit extends Component
             'required_without_all' => 'Mora biti upisan bar jedan način plaćanja.',
             'numeric' => 'Mora biti broj.',
             'description.required_if' => 'Dodatan opis mora da postoji ako je izabrano OSTALO.',
-            'location.required' => 'Morate izabrati lokaciju.',
-            'location.not_in' => 'Morate izabrati lokaciju.',
-            'location.exists' => 'Lokacija ne postoji u bazi.'
+            // 'location.required' => 'Morate izabrati lokaciju.',
+            // 'location.not_in' => 'Morate izabrati lokaciju.',
+            // 'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
         foreach($this->expenseFields as $field => $value){
@@ -77,9 +77,9 @@ class Edit extends Component
             }
         }
 
-        if(Auth::user()->role_id == 3){
-            $this->expense["location_id"] = Auth::user()->location_id;
-        }
+        // if(Auth::user()->role_id == 3){
+        //     $this->expense["location_id"] = Auth::user()->location_id;
+        // }
 
         $state = DailyState::where('state_date', $this->expense["expense_date"])->where('location_id', $this->expense["location_id"])->first();
         if(!$state){
@@ -118,7 +118,7 @@ class Edit extends Component
     {
         return view('livewire.expenses.edit', [
             "expenseTypes" => Auth::user()->role_id == 1 ? ExpenseType::all() : ExpenseType::where('is_admin', '0')->get(),
-            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
+            // "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

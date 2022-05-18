@@ -36,7 +36,7 @@ class Edit extends Component
         "policy" => "",
         "policy_check" => "",
         "insurance_company_id" => "0",
-        "location_id" => "0",
+        // "location_id" => "0",
         "returning" => "",
         "total" => ""
     ];
@@ -70,7 +70,7 @@ class Edit extends Component
             "policy" => $this->technical->policy,
             "policy_check" => $this->technical->policy_check,
             "insurance_company_id" => $this->technical->insurance_company_id ?? '0',
-            "location_id" => $this->technical->location_id,
+            // "location_id" => $this->technical->location_id,
             "returning" => $this->technical->returning ?? false,
             "total" => $this->technical->total ?? ''
         ];
@@ -99,14 +99,14 @@ class Edit extends Component
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
             'policy_check' => ['numeric'],
-            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
-                            Auth::user()->role_id != 3 ? 'not_in:0' : '',
-                            Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
-                            function($att, $val, $fail){
-                                if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
-                                    $fail('Odabrana je nedozvoljena lokacija.');
-                                }
-                            }],
+            // 'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+            //                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
+            //                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+            //                 function($att, $val, $fail){
+            //                     if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+            //                         $fail('Odabrana je nedozvoljena lokacija.');
+            //                     }
+            //                 }],
             'returning' => [],
             'total' => ['numeric']
         ], [
@@ -120,7 +120,7 @@ class Edit extends Component
             'insurance_company_id.exists' => 'Osiguranje ne postoji u bazi.',
             // 'location_id.required' => 'Lokacija je obavezna.',
             // 'location_id.not_in' => 'Lokacija nije izabrana.',
-            'location_id.exists' => 'Lokacija ne postoji u bazi.',
+            // 'location_id.exists' => 'Lokacija ne postoji u bazi.',
             'required_without_all' => 'Mora biti upisan bar jedan način plaćanja.',
             'numeric' => 'Mora biti broj.'
         ])->validate();
@@ -131,9 +131,9 @@ class Edit extends Component
             }
         }
 
-        if(Auth::user()->role_id == 3){
-            $this->technical['location_id'] = Auth::user()->location_id;
-        }
+        // if(Auth::user()->role_id == 3){
+        //     $this->technical['location_id'] = Auth::user()->location_id;
+        // }
 
         $state = DailyState::where('state_date', $this->technical["tech_date"])->where('location_id', $this->technical["location_id"])->first();
         if(!$state){
@@ -234,7 +234,7 @@ class Edit extends Component
     {
         return view('livewire.technicals.edit', [
             'companies' => InsuranceCompany::all(),
-            "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
+            // "locations" => Auth::user()->role_id == 2 ? Auth::user()->locations : Location::all()
         ]);
     }
 }

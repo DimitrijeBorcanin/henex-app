@@ -12,7 +12,6 @@ use Livewire\Component;
 class Create extends Component
 {
     public $check = [
-        "check_date" => "",
         "status_start" => "",
         "received" => "",
         "debited" => "",
@@ -21,7 +20,7 @@ class Create extends Component
 
     public function store(){
         Validator::make($this->check, [
-            'check_date' => ['required', 'date'],
+            // 'check_date' => ['required', 'date'],
             'status_start' => ['required', 'numeric', 'max:1000000'],
             'received' => ['required', 'numeric', 'max:1000000'],
             'debited' => ['required', 'numeric', 'max:1000000'],
@@ -48,6 +47,14 @@ class Create extends Component
 
         if(Auth::user()->role_id == 3){
             $this->check["location_id"] = Auth::user()->location_id;
+        }
+        
+        $this->check["check_date"] = Carbon::now()->format('Y-m-d');
+
+        $alreadyExists = Check::where('location_id', $this->check["location_id"])->where('check_date', $this->check["check_date"])->exists();
+        if($alreadyExists){
+            $this->dispatchBrowserEvent('flasherror', ['message' => 'Već je postavljeno početno stanje za današnji dan za ovu lokaciju!']);
+            return;
         }
 
         $newCheck = Check::create($this->check);
