@@ -72,7 +72,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/clients/create', Clients\Create::class)->name('clients.create');
     Route::get('/clients/{client}', Clients\Show::class)->name('clients.show');
 
-    Route::middleware(['admin'])->group(function(){
+    Route::middleware(['not-worker'])->group(function(){
         Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
         // Route::get('/daily-states/{state}/edit', DailyStates\Edit::class)->name('daily-states.edit');
         Route::get('/slips', Slips\ShowAll::class)->name('slips');

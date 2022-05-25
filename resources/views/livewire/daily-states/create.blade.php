@@ -16,12 +16,17 @@
     
         <x-slot name="form">      
             <!-- Date -->
-            <div class="col-span-6">
+            <div class="col-span-3">
                 <x-jet-label for="register_start">Stanje kase na početku dana <i class="fa-solid fa-spinner animate-spin" wire:loading.inline></i></x-jet-label>
                 <x-jet-input id="register_start" type="text" class="mt-1 block w-full" wire:model.defer="state.register_start"/>
                 <x-jet-input-error for="register_start" class="mt-2" />
             </div>
-            @if(Auth::user()->role_id == 1)
+            <div class="col-span-3">
+                <x-jet-label for="safe_start">Stanje sefa na početku dana <i class="fa-solid fa-spinner animate-spin" wire:loading.inline></i></x-jet-label>
+                <x-jet-input id="safe_start" type="text" class="mt-1 block w-full" wire:model.defer="state.safe_start"/>
+                <x-jet-input-error for="safe_start" class="mt-2" />
+            </div>
+            @if(Auth::user()->role_id != 3)
             <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="state.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id" wire:change="getPreviousState">

@@ -21,7 +21,7 @@
                 <x-jet-input id="status_start" type="text" class="mt-1 block w-full" wire:model.defer="slip.status_start" wire:loading.attr="disabled" />
                 <x-jet-input-error for="status_start" class="mt-2" />
             </div>
-            @if(Auth::user()->role_id == 1)
+            @if(Auth::user()->role_id != 3)
             <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="slip.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id" wire:change="checkLastDay">

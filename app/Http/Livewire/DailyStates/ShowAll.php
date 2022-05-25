@@ -26,25 +26,33 @@ class ShowAll extends Component
     }
 
     private function fetch(){
-        $checks = new DailyState();
+        $states = new DailyState();
 
         if($this->filter["date_from"] != ''){
-            $checks = $checks->where('state_date', '>=', $this->filter["date_from"]);
+            $states = $states->where('state_date', '>=', $this->filter["date_from"]);
         } else {
-            // $checks = $checks->where('state_date', '>=', Carbon::now()->startOfMonth()->toDateString('YYYY-mm-dd'));
+            // $states = $states->where('state_date', '>=', Carbon::now()->startOfMonth()->toDateString('YYYY-mm-dd'));
         }
 
         if($this->filter["date_to"] != ''){
-            $checks = $checks->where('state_date', '<=', $this->filter["date_to"]);
+            $states = $states->where('state_date', '<=', $this->filter["date_to"]);
         } else {
-            // $checks = $checks->where('state_date', '<=', Carbon::now()->endOfMonth()->toDateString('YYYY-mm-dd'));
+            // $states = $states->where('state_date', '<=', Carbon::now()->endOfMonth()->toDateString('YYYY-mm-dd'));
         }
 
+        // if($this->filter["location"] != 0){
+        //     $states = $states->where('location_id', $this->filter["location"]);
+        // }
+
         if($this->filter["location"] != 0){
-            $checks = $checks->where('location_id', $this->filter["location"]);
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $states = $states->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $states = $states->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
-        return $checks->orderBy('state_date', 'desc')->paginate($this->pagination);
+        return $states->orderBy('state_date', 'desc')->paginate($this->pagination);
     }
 
     public function updatingFilter(){

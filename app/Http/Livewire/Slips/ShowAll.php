@@ -40,8 +40,16 @@ class ShowAll extends Component
             // $slips = $slips->where('slip_date', '<=', Carbon::now()->endOfMonth()->toDateString('YYYY-mm-dd'));
         }
 
+        // if($this->filter["location"] != 0){
+        //     $slips = $slips->where('location_id', $this->filter["location"]);
+        // }
+
         if($this->filter["location"] != 0){
-            $slips = $slips->where('location_id', $this->filter["location"]);
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $slips = $slips->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $slips = $slips->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
         return $slips->orderBy('slip_date')->paginate($this->pagination);

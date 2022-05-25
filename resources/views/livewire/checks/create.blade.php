@@ -16,11 +16,11 @@
     
         <x-slot name="form">      
             <!-- Date -->
-            <div class="col-span-3">
+            {{-- <div class="col-span-3">
                 <x-jet-label for="check_date" value="Datum" />
                 <x-jet-input id="check_date" type="date" class="mt-1 block w-full" wire:model.defer="check.check_date" wire:change="checkLastDay"/>
                 <x-jet-input-error for="check_date" class="mt-2" />
-            </div>
+            </div> --}}
             <!-- Cash -->
             <div class="col-span-3">
                 <x-jet-label for="status_start">Početno stanje <i class="fa-solid fa-spinner animate-spin" wire:loading.inline></i></x-jet-label>
@@ -38,6 +38,7 @@
                 <x-jet-input-error for="debited" class="mt-2" />
             </div>
 
+            @if(Auth::user()->role_id != 3)
             <div class="col-span-3">
                 <x-jet-label for="location_id" value="Lokacija" />
                 <select wire:model.defer="check.location_id" class="form-input rounded-md shadow-sm block mt-1 w-full py-2" id="location_id">
@@ -48,6 +49,7 @@
                 </select>
                 <x-jet-input-error for="location_id" class="mt-2" />
             </div>
+            @endif
         </x-slot>
     
         <x-slot name="actions">

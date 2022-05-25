@@ -13,8 +13,8 @@ class Create extends Component
 {
     public $check = [
         "status_start" => "",
-        "received" => "",
-        "debited" => "",
+        "received" => "0",
+        "debited" => "0",
         "location_id" => "0"
     ];
 

@@ -44,7 +44,7 @@ class ShowAll extends Component
 
         if($this->filter["location"] != 0){
             if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
-                $incomes = $technicals->where('location_id', $this->filter["location"]);
+                $technicals = $technicals->where('location_id', $this->filter["location"]);
             } 
         } else if(Auth::user()->role_id == 2){
             $technicals = $technicals->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());

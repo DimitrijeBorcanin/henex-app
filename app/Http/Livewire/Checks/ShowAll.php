@@ -40,8 +40,16 @@ class ShowAll extends Component
             // $checks = $checks->where('check_date', '<=', Carbon::now()->endOfMonth()->toDateString('YYYY-mm-dd'));
         }
 
+        // if($this->filter["location"] != 0){
+        //     $checks = $checks->where('location_id', $this->filter["location"]);
+        // }
+
         if($this->filter["location"] != 0){
-            $checks = $checks->where('location_id', $this->filter["location"]);
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $checks = $checks->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $checks = $checks->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         }
         
         return $checks->orderBy('check_date')->paginate($this->pagination);
