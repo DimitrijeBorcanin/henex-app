@@ -36,7 +36,7 @@
         {{-- Error message --}}
         <div class="fixed top-20 w-full flex justify-center"
             x-data="{ shown: false, timeout: null, message: null }"
-            @flasherror.window="(e) => { location.reload(); clearTimeout(timeout); shown = true; message = e.detail.message; timeout = setTimeout(() => { shown = false; message = null }, 2000); }"
+            @flasherror.window="(e) => { clearTimeout(timeout); shown = true; message = e.detail.message; timeout = setTimeout(() => { shown = false; message = null }, 2000); }"
             x-show="shown"
             x-transition
             style="display:none;">
