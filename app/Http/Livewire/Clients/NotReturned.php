@@ -35,6 +35,16 @@ class NotReturned extends Component
         if($this->filterNotReturned["location"] != 0){
             $clients = $clients->where('location_id', $this->filterNotReturned["location"]);
         }
+
+        if($this->filterNotReturned["location"] != 0){
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filterNotReturned["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $clients = $clients->where('location_id', $this->filterNotReturned["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $clients = $clients->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
+        } else if(Auth::user()->role_id == 3){
+            $clients = $clients->where('location_id', Auth::user()->location_id);
+        }
         
         return $clients->latest()->paginate($this->pagination);
     }

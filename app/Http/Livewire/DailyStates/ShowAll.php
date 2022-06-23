@@ -50,6 +50,8 @@ class ShowAll extends Component
             } 
         } else if(Auth::user()->role_id == 2){
             $states = $states->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
+        } else if(Auth::user()->role_id == 3){
+            $states = $states->where('location_id', Auth::user()->location_id)->where('state_date', Carbon::now()->toDateString('YYYY-mm-dd'));
         }
         
         return $states->orderBy('state_date', 'desc')->paginate($this->pagination);

@@ -50,6 +50,8 @@ class ShowAll extends Component
             } 
         } else if(Auth::user()->role_id == 2){
             $checks = $checks->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
+        } else if(Auth::user()->role_id == 3){
+            $checks = $checks->where('location_id', Auth::user()->location_id)->where('check_date', Carbon::now()->toDateString('YYYY-mm-dd'));
         }
         
         return $checks->orderBy('check_date')->paginate($this->pagination);

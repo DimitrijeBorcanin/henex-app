@@ -77,13 +77,22 @@ class Edit extends Component
     }
 
     public function update(){
+
+        if($this->technicalFields["insurance_company_id"] == "0"){
+            $this->technicalFields["insurance_company_id"] == null;
+        }
+
         Validator::make($this->technicalFields, [
             'reg_number' => ['string', 'max:255'],
             'tech_date' => ['required', 'date'],
-            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric'],
-            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric'],
-            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric'],
-            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric'],
+            // 'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm', 'numeric'],
+            // 'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric'],
+            // 'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric'],
+            // 'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric'],
+            'reg_cash' => ['numeric'],
+            'reg_check' => ['numeric'],
+            'reg_card' => ['numeric'],
+            'reg_firm' => ['numeric'],
             // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric'],
             // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric'],
             // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric'],
@@ -163,12 +172,9 @@ class Edit extends Component
                 $oldState->save();
             }
 
-            if(($this->technical["tech_cash"] && $this->technical["tech_cash"] > 0) ||
-                ($this->technical["tech_check"] && $this->technical["tech_check"] > 0) ||
-                ($this->technical["tech_card"] && $this->technical["tech_card"] > 0) ||
-                ($this->technical["tech_invoice"] && $this->technical["tech_invoice"] > 0)){
-                    $state->technical_no = $state->technical_no - 1;
-                    $state->save();
+            if(!$this->technical["returning"]){
+                $state->technical_no = $oldState->technical_no - 1;
+                $state->save();
             }
 
             $oldCheck = Check::where('check_date', $this->technical->tech_date)->where('location_id', $this->technical->location_id)->first();
@@ -203,10 +209,7 @@ class Edit extends Component
                 $state->save();
             }
 
-            if(($this->technical["tech_cash"] && $this->technical["tech_cash"] > 0) ||
-                ($this->technical["tech_check"] && $this->technical["tech_check"] > 0) ||
-                ($this->technical["tech_card"] && $this->technical["tech_card"] > 0) ||
-                ($this->technical["tech_invoice"] && $this->technical["tech_invoice"] > 0)){
+            if(!$this->technical["returning"]){
                     $state->technical_no = $state->technical_no + 1;
                     $state->save();
             }

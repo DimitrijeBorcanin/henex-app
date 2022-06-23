@@ -57,6 +57,8 @@ class ShowAll extends Component
             } 
         } else if(Auth::user()->role_id == 2){
             $expenses = $expenses->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
+        } else if(Auth::user()->role_id == 3){
+            $expenses = $expenses->where('location_id', Auth::user()->location_id);
         }
         
         return $expenses->latest()->paginate($this->pagination);

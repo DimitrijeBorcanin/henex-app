@@ -46,6 +46,16 @@ class ShowAll extends Component
             $messages = $messages->where('location_id', $this->filter["location"]);
         }
 
+        if($this->filter["location"] != 0){
+            if(Auth::user()->role_id == 1 || (Auth::user()->role_id == 2 && in_array($this->filter["location"], Auth::user()->locations()->pluck('location_id')->toArray()))){
+                $messages = $messages->where('location_id', $this->filter["location"]);
+            } 
+        } else if(Auth::user()->role_id == 2){
+            $messages = $messages->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
+        } else if(Auth::user()->role_id == 3){
+            $messages = $messages->where('location_id', Auth::user()->location_id);
+        }
+
         return $messages->orderBy('sent_date', 'desc')->paginate($this->pagination);
     }
 
@@ -89,16 +99,31 @@ class ShowAll extends Component
             'viber' => ['integer'],
             'sms' => ['integer'],
             'letters' => ['integer'],
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }]
         ], [
             'sent_date.required' => 'Datum je obavezan.',
             'sent_date.date' => 'Datum je u pogrešnom formatu.',
-            'integer' => 'U polju mora biti celobrojna vrednost.'
+            'integer' => 'U polju mora biti celobrojna vrednost.',
+            'location.required' => 'Morate izabrati lokaciju.',
+            'location.not_in' => 'Morate izabrati lokaciju.',
+            'location.exists' => 'Lokacija ne postoji u bazi.'
         ])->validate();
 
         foreach($this->message as $field => $value){
             if(empty($value)){
                 unset($this->message[$field]);
             }
+        }
+
+        if(Auth::user()->role_id == 3){
+            $this->message["location_id"] = Auth::user()->location_id;
         }
 
         MarketingMessage::create($this->message);
@@ -116,7 +141,14 @@ class ShowAll extends Component
             'viber' => ['integer'],
             'sms' => ['integer'],
             'letters' => ['integer'],
-            'location_id' => ['required', 'not_in:0', 'exists:locations,id']
+            'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
+                Auth::user()->role_id != 3 ? 'not_in:0' : '',
+                Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
+                function($att, $val, $fail){
+                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                        $fail('Odabrana je nedozvoljena lokacija.');
+                    }
+                }]
         ], [
             'sent_date.required' => 'Datum je obavezan.',
             'sent_date.date' => 'Datum je u pogrešnom formatu.',

@@ -43,24 +43,40 @@ class Create extends Component
 
     public function store(){
         
+        if($this->technical["insurance_company_id"] == "0"){
+            $this->technical["insurance_company_id"] == null;
+        }
+
         Validator::make($this->technical, [
             'reg_number' => ['string', 'max:255'],
-            'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            'reg_cash' => ['numeric'],
+            'reg_check' => ['numeric'],
+            'reg_card' => ['numeric'],
+            'reg_firm' => ['numeric'],
+            // 'reg_cash' => ['required_without_all:reg_check,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash,tech_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
             // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric'],
             // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric'],
             // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric'],
             // 'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric'],
-            'tech_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'tech_check' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_cash,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'tech_card' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_cash,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'tech_invoice' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_cash,agency,voucher,adm,adm_non_cash', 'numeric'],
-            'agency' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,adm_non_cash', 'numeric'],
-            'voucher' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,agency,adm,adm_non_cash', 'numeric'],
-            'adm' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,agency,adm_non_cash', 'numeric'],
-            'adm_non_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,agency', 'numeric'],
+            'tech_cash' => ['numeric'],
+            'tech_check' => ['numeric'],
+            'tech_card' => ['numeric'],
+            'tech_invoice' => ['numeric'],
+            'agency' => ['numeric'],
+            'voucher' => ['numeric'],
+            'adm' => ['numeric'],
+            'adm_non_cash' => ['numeric'],
+            // 'tech_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'tech_check' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_cash,tech_card,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'tech_card' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_cash,tech_invoice,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'tech_invoice' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_cash,agency,voucher,adm,adm_non_cash', 'numeric'],
+            // 'agency' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,adm_non_cash', 'numeric'],
+            // 'voucher' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,agency,adm,adm_non_cash', 'numeric'],
+            // 'adm' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,agency,adm_non_cash', 'numeric'],
+            // 'adm_non_cash' => ['required_without_all:reg_check,reg_card,reg_firm,reg_cash,tech_check,tech_card,tech_invoice,tech_cash,voucher,adm,agency', 'numeric'],
             'insurance_company_id' => ['exists:insurance_companies,id'],
             'policy' => ['numeric'],
             'policy_check' => ['numeric'],
@@ -132,10 +148,7 @@ class Create extends Component
                 $state->save();
             }
 
-            if(($this->technical["tech_cash"] && $this->technical["tech_cash"] > 0) ||
-                ($this->technical["tech_check"] && $this->technical["tech_check"] > 0) ||
-                ($this->technical["tech_card"] && $this->technical["tech_card"] > 0) ||
-                ($this->technical["tech_invoice"] && $this->technical["tech_invoice"] > 0)){
+            if(!$this->technical["returning"]){
                     $state->technical_no = $state->technical_no + 1;
                     $state->save();
             }
@@ -169,6 +182,10 @@ class Create extends Component
         $sumTech = (empty($this->technical["tech_cash"]) ? 0 : $this->technical["tech_cash"])
                 + (empty($this->technical["tech_card"]) ? 0 : $this->technical["tech_card"])
                 + (empty($this->technical["tech_check"]) ? 0 : $this->technical["tech_check"])
+                + (empty($this->technical["voucher"]) ? 0 : $this->technical["voucher"])
+                + (empty($this->technical["adm"]) ? 0 : $this->technical["adm"])
+                + (empty($this->technical["adm_non_cash"]) ? 0 : $this->technical["adm_non_cash"])
+                + (empty($this->technical["agency"]) ? 0 : $this->technical["agency"])
                 + (empty($this->technical["tech_invoice"]) ? 0 : $this->technical["tech_invoice"]);
 
         if($sumTech && $sumTech > 0 && !empty($this->autofillPayment) && $this->technical["total"] && $this->technical["total"] > 0){

@@ -34,7 +34,7 @@
                         @endforeach
                     </select>
                 </div>
-
+                @if(Auth::user()->role_id != 3)
                 <div class="w-1/5">
                     <x-jet-label for="location" value="Lokacija" />
                     <select wire:model="filter.location" class="form-input rounded-md shadow-sm block mt-1 py-2 w-full" id="location">
@@ -44,6 +44,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
             </div>
             @endif
             <div class="flex">

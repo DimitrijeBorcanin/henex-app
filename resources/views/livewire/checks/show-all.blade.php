@@ -14,6 +14,7 @@
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
         <div class="flex justify-between">
             <div class="w-full mb-3 px-3 md:px-0 flex">
+                @if(Auth::user()->role_id != 3)
                 <div class="w-1/5 mr-2">
                     <x-jet-label for="date_from" value="Datum od" />
                     <x-jet-input id="date_from" type="date" class="mt-1 block w-full" wire:model="filter.date_from" />
@@ -33,6 +34,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
             </div>
             <div class="flex">
                 <div onClick="window.location='{{route('checks.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">

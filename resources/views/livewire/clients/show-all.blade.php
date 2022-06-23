@@ -24,7 +24,7 @@
                     <x-jet-label for="date_to" value="Datum do" />
                     <x-jet-input id="date_to" type="date" class="mt-1 block w-full" wire:model="filterNew.date_to" />
                 </div>
-    
+                @if(Auth::user()->role_id != 3)
                 <div class="w-1/5">
                     <x-jet-label for="location" value="Lokacija" />
                     <select wire:model="filterNew.location" class="form-input rounded-md shadow-sm block mt-1 py-2 w-full" id="location">
@@ -34,6 +34,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
             </div>
             <div class="flex">
                 <div onClick="window.location='{{route('clients.create')}}'" class="mr-3 w-12 h-12 cursor-pointer flex justify-center items-center self-center rounded bg-gray-200 hover:bg-gray-500 hover:text-white">

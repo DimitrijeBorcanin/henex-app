@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\StateCheckController;
 use App\Http\Livewire\Users;
+use App\Http\Livewire\Reports;
 use App\Http\Livewire\Technicals;
 use App\Http\Livewire\Expenses;
 use App\Http\Livewire\Incomes;
@@ -37,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function(){
         return view('dashboard');
     })->name('dashboard');
     Route::get('/users', Users\ShowAll::class)->name('users')->middleware('admin');
+    Route::get('/reports', Reports\Show::class)->name('reports')->middleware('admin');
 
     Route::get('/technicals', Technicals\ShowAll::class)->name('technicals');
     Route::get('/technicals/create', Technicals\Create::class)->name('technicals.create')->middleware(['daily-state', 'daily-check']);
@@ -47,9 +49,11 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/check-daily-check', [StateCheckController::class, 'checkCheck']);
     Route::get('/check-daily-slip', [StateCheckController::class, 'slipCheck']);
 
+    Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
     Route::get('/daily-states/create', DailyStates\Create::class)->name('daily-states.create');
     Route::get('/daily-states/{state}', DailyStates\Show::class)->name('daily-states.show');
 
+    Route::get('/slips', Slips\ShowAll::class)->name('slips');
     Route::get('/slips/create', Slips\Create::class)->name('slips.create');
     Route::get('/slips/{slip}', Slips\Show::class)->name('slips.show');
 
@@ -73,9 +77,8 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/clients/{client}', Clients\Show::class)->name('clients.show');
 
     Route::middleware(['not-worker'])->group(function(){
-        Route::get('/daily-states', DailyStates\ShowAll::class)->name('daily-states');
         // Route::get('/daily-states/{state}/edit', DailyStates\Edit::class)->name('daily-states.edit');
-        Route::get('/slips', Slips\ShowAll::class)->name('slips');
+        
         Route::get('/slips/{slip}/edit', Slips\Edit::class)->name('slips.edit');
 
         Route::get('/expenses/{expense}/edit', Expenses\Edit::class)->name('expenses.edit');
