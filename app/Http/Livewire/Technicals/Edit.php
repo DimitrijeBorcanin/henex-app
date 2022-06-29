@@ -71,7 +71,7 @@ class Edit extends Component
             "policy_check" => $this->technical->policy_check,
             "insurance_company_id" => $this->technical->insurance_company_id ?? '0',
             // "location_id" => $this->technical->location_id,
-            "returning" => $this->technical->returning ?? false,
+            "returning" => $this->technical->returning != 0 ? true : false,
             "total" => $this->technical->total ?? ''
         ];
     }
@@ -89,25 +89,25 @@ class Edit extends Component
             // 'reg_check' => ['required_without_all:reg_cash,reg_card,reg_firm', 'numeric'],
             // 'reg_card' => ['required_without_all:reg_check,reg_cash,reg_firm', 'numeric'],
             // 'reg_firm' => ['required_without_all:reg_check,reg_card,reg_cash', 'numeric'],
-            'reg_cash' => ['numeric'],
-            'reg_check' => ['numeric'],
-            'reg_card' => ['numeric'],
-            'reg_firm' => ['numeric'],
+            'reg_cash' => [''],
+            'reg_check' => [''],
+            'reg_card' => [''],
+            'reg_firm' => [''],
             // 'tech_cash' => ['required_without_all:tech_check,tech_card,tech_invoice', 'numeric'],
             // 'tech_check' => ['required_without_all:tech_cash,tech_card,tech_invoice', 'numeric'],
             // 'tech_card' => ['required_without_all:tech_check,tech_cash,tech_invoice', 'numeric'],
             // 'tech_invoice' => ['required_without_all:tech_check,tech_cash,tech_card', 'numeric'],
-            'tech_cash' => ['numeric'],
-            'tech_check' => ['numeric'],
-            'tech_card' => ['numeric'],
-            'tech_invoice' => ['numeric'],
-            'agency' => ['numeric'],
-            'voucher' => ['numeric'],
-            'adm' => ['numeric'],
-            'adm_non_cash' => ['numeric'],
+            'tech_cash' => [''],
+            'tech_check' => [''],
+            'tech_card' => [''],
+            'tech_invoice' => [''],
+            'agency' => [''],
+            'voucher' => [''],
+            'adm' => [''],
+            'adm_non_cash' => [''],
             'insurance_company_id' => ['exists:insurance_companies,id'],
-            'policy' => ['numeric'],
-            'policy_check' => ['numeric'],
+            'policy' => [''],
+            'policy_check' => [''],
             // 'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
             //                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
             //                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
@@ -135,7 +135,7 @@ class Edit extends Component
         ])->validate();
 
         foreach($this->technicalFields as $field => $value){
-            if(empty($value)){
+            if(empty($value) && $field != "returning"){
                 $this->technicalFields[$field] = null;
             }
         }

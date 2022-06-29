@@ -129,22 +129,22 @@
 
             <div class="col-span-3">
                 <x-jet-label for="agency" value="Agencija" />
-                <x-jet-input id="agency" type="text" class="mt-1 block w-full" wire:model.defer="technical.agency"/>
+                <x-jet-input id="agency" type="text" class="mt-1 block w-full" wire:model.defer="technical.agency" wire:change="calculateDifference"/>
                 <x-jet-input-error for="agency" class="mt-2" />
             </div>
             <div class="col-span-3">
                 <x-jet-label for="voucher" value="Vaučer" />
-                <x-jet-input id="voucher" type="text" class="mt-1 block w-full" wire:model.defer="technical.voucher"/>
+                <x-jet-input id="voucher" type="text" class="mt-1 block w-full" wire:model.defer="technical.voucher" wire:change="calculateDifference"/>
                 <x-jet-input-error for="voucher" class="mt-2" />
             </div>
             <div class="col-span-3">
                 <x-jet-label for="adm" value="ADM" />
-                <x-jet-input id="adm" type="text" class="mt-1 block w-full" wire:model.defer="technical.adm"/>
+                <x-jet-input id="adm" type="text" class="mt-1 block w-full" wire:model.defer="technical.adm" wire:change="calculateDifference"/>
                 <x-jet-input-error for="adm" class="mt-2" />
             </div>
             <div class="col-span-3">
                 <x-jet-label for="adm_non_cash" value="ADM bezgotovina" />
-                <x-jet-input id="adm_non_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.adm_non_cash"/>
+                <x-jet-input id="adm_non_cash" type="text" class="mt-1 block w-full" wire:model.defer="technical.adm_non_cash" wire:change="calculateDifference"/>
                 <x-jet-input-error for="adm_non_cash" class="mt-2" />
             </div>
 
