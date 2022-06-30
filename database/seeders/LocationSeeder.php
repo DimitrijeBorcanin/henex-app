@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 
 class LocationSeeder extends Seeder
 {
-    private $locations = ["Dušanovac", "Novi Beograd", "Borča", "Umka", "Zemun", "Kaluđerica", "Kumodraž", "Mirijevo", "Rakovica", "Leštane", "Mali Mokri Lug", "Altina", "Mladenovac", "Obrenovac", "Bezar", "Urovci", "Čukarica"];
+    private $locations = ["Dušanovac", "Novi Beograd", "Borča", "Umka", "Zemun", "Kaluđerica", "Kumodraž", "Mirijevo", "Rakovica", "Leštane", "Mali Mokri Lug", "Altina", "Mladenovac", "Obrenovac", "Bezar", "Urovci", "Čukarica", "Blokovi NBGD", "Easy Borča", "Voždovac K.test", "BHC", "Blutek"];
     /**
      * Run the database seeds.
      *
