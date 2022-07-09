@@ -12,6 +12,7 @@ use App\Http\Livewire\Checks;
 use App\Http\Livewire\DailyStates;
 use App\Http\Livewire\Slips;
 use App\Models\DailyState;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,6 +33,11 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware(['auth:sanctum'])->get('/dashboard', function () {
 //     return view('dashboard');
 // })->name('dashboard');
+
+Route::get('/migrate', function(){
+    Artisan::call('migrate');
+    echo 'Migrated';
+});
 
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/', function(){
