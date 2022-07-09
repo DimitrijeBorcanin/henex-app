@@ -34,11 +34,6 @@ use Illuminate\Support\Facades\Route;
 //     return view('dashboard');
 // })->name('dashboard');
 
-Route::get('/migrate', function(){
-    Artisan::call('migrate');
-    echo 'Migrated';
-});
-
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('/', function(){
         return view('dashboard');
