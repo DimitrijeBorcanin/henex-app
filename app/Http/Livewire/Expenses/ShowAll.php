@@ -29,9 +29,9 @@ class ShowAll extends Component
 
     private function fetch(){
 
-        if(Auth::user()->role_id == 3){
-            return [];
-        }
+        // if(Auth::user()->role_id == 3){
+        //     return [];
+        // }
 
         $expenses = Expense::with('expenseType');
 

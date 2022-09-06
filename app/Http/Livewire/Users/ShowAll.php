@@ -7,6 +7,7 @@ use App\Models\Location;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Validator;
@@ -213,6 +214,7 @@ class ShowAll extends Component
 
         try {
             if(!empty($this->user["password"]) || !empty($this->user["password_confirmation"])){
+                $this->user["password"] = Hash::make($this->user["password"]);
                 $user->update($this->user);
             } else {
                 $user->update([

@@ -47,7 +47,7 @@ class Edit extends Component
             'cash' => ['required_without_all:non_cash', 'numeric', 'max:1000000'],
             'non_cash' => ['required_without_all:cash', 'numeric', 'max:1000000'],
             'expense_type_id' => ['required', 'not_in:0', 'exists:expense_types,id'],
-            'description' => ['required_if:expense_type_id,1', 'string'],
+            'description' => ['string'],
             // 'location_id' => [Auth::user()->role_id != 3 ? 'required' : '',
             //                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
             //                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',

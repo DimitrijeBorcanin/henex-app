@@ -22,7 +22,7 @@ class DailyState extends Model
                 $this->attributes["safe_debited"];
     }
 
-    public function getFormattedSafeEdnAttribute(){
+    public function getFormattedSafeEndAttribute(){
         return number_format($this->getSafeEndAttribute(), 2, ',', '.');
     }
 

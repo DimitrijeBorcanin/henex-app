@@ -60,7 +60,7 @@
             </div>
         </div>
         
-        @if(Auth::user()->role_id != 3)
+        {{-- @if(Auth::user()->role_id != 3) --}}
         <div wire:loading.remove wire:target="resetPage" class="overflow-x-auto w-full">
             <table class="min-w-full w-full divide-y divide-gray-200 mb-3">
                 <thead>
@@ -97,6 +97,6 @@
             </table>
             {{ $expenses->links('pagination.custom-pagination') }}
         </div>
-        @endif
+        {{-- @endif --}}
     </div>
 </div>

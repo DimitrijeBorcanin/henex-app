@@ -28,7 +28,7 @@ class Create extends Component
                 Auth::user()->role_id != 3 ? 'not_in:0' : '',
                 Auth::user()->role_id != 3 ? 'exists:locations,id' : '',
                 function($att, $val, $fail){
-                    if(Auth::user()->role_id == 2 && in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
+                    if(Auth::user()->role_id == 2 && !in_array($val, Auth::user()->locations()->pluck('location_id')->toArray())){
                         $fail('Odabrana je nedozvoljena lokacija.');
                     }
                 }]

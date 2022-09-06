@@ -28,19 +28,19 @@ class ShowAll extends Component
     }
 
     private function fetch(){
-        if(Auth::user()->role_id == 3){
-            return [];
-        }
+        // if(Auth::user()->role_id == 3){
+        //     return [];
+        // }
         
         $incomes = Income::with('incomeType');
 
-        if($this->filter["date_from"] != ''){
+        if($this->filter["date_from"] != '' && Auth::user()->role_id != 3){
             $incomes = $incomes->where('income_date', '>=', $this->filter["date_from"]);
         } else {
             // $incomes = $incomes->where('income_date', '>=', Carbon::now()->startOfMonth()->toDateString('YYYY-mm-dd'));
         }
 
-        if($this->filter["date_to"] != ''){
+        if($this->filter["date_to"] != '' && Auth::user()->role_id != 3){
             $incomes = $incomes->where('income_date', '<=', $this->filter["date_to"]);
         } else {
             // $incomes = $incomes->where('income_date', '<=', Carbon::now()->endOfMonth()->toDateString('YYYY-mm-dd'));
@@ -57,7 +57,7 @@ class ShowAll extends Component
         } else if(Auth::user()->role_id == 2){
             $incomes = $incomes->whereIn('location_id', Auth::user()->locations()->pluck('location_id')->toArray());
         } else if(Auth::user()->role_id == 3){
-            $income = $income->where('location_id', Auth::user()->location_id);
+            $income = $incomes->where('location_id', Auth::user()->location_id)->where('income_date', Carbon::now()->toDateString('YYYY-mm-dd'));
         }
         
         return $incomes->latest()->paginate($this->pagination);
